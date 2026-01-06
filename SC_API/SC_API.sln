@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36811.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC_API", "SC_API.csproj", "{CC58CA37-209B-8CB5-7187-3EE9D34023D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC_Repository", "..\SC_Repository\SC_Repository.csproj", "{B73AC4B1-80F6-FACD-A87B-9904F9913051}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC58CA37-209B-8CB5-7187-3EE9D34023D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC58CA37-209B-8CB5-7187-3EE9D34023D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC58CA37-209B-8CB5-7187-3EE9D34023D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC58CA37-209B-8CB5-7187-3EE9D34023D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B73AC4B1-80F6-FACD-A87B-9904F9913051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B73AC4B1-80F6-FACD-A87B-9904F9913051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B73AC4B1-80F6-FACD-A87B-9904F9913051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B73AC4B1-80F6-FACD-A87B-9904F9913051}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {242E9EB1-C73F-41A1-89DD-CB69C0A2B5CC}
+	EndGlobalSection
+EndGlobal
