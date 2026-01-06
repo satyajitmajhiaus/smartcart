@@ -22,6 +22,14 @@ namespace SC_Repository.Implementations
             return await connection.QueryAsync<Product>(query);
         }
 
+        public async Task<IEnumerable<Product>> GetProductsByCategoryIDAsync(int categoryId)
+        {
+            var query = "select * from Products where  CategoryId = " + categoryId + "or CategoryId in (select CategoryId from  Categories where ParentCategoryId = " + categoryId + ")";
+            using var connection = _context.CreateConnection();
+            return await connection.QueryAsync<Product>(query);
+        }
+
+
         public async Task<Product?> GetByIdAsync(int id)
         {
             var query = "SELECT * FROM Products WHERE ProductId = @Id";
