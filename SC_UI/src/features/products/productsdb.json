@@ -1,0 +1,173 @@
+[
+    {
+      "pId": 1,
+      "name": "boAt Stone Grenade",
+      "description":
+        "Portable 5W Bluetooth speaker with rugged design and deep bass.",
+      "category": "Portable Audio",
+      "price": 1299,
+      "tags": "Bluetooth, Portable, Speaker",
+      "imagelink": "https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?auto=compress&cs=tinysrgb&w=400",
+      "stock": 10
+    },
+    {
+      "pId": 2,
+      "name": "JBL Flip 4",
+      "description": "Waterproof wireless speaker with 12 hours of playtime.",
+      "category": "Portable Audio",
+      "price": 7999,
+      "tags": "Bluetooth, Waterproof, Speaker",
+      "imagelink": "https://picsum.photos/200/100?random=102",
+      "stock": 1
+    },
+    {
+      "pId": 3,
+      "name": "Sony HT-S20R",
+      "description": "5.1 channel home theatre system with Dolby Digital.",
+      "category": "Home Audio",
+      "price": 16990,
+      "tags": "Home Theatre, Dolby, Speaker",
+      "imagelink": "https://picsum.photos/200/100?random=103",
+      "stock": 0
+    },
+    {
+      "pId": 4,
+      "name": "Philips TAS1209BK",
+      "description": "Compact 5W Bluetooth speaker with clear sound.",
+      "category": "Portable Audio",
+      "price": 1699,
+      "tags": "Bluetooth, Compact, Speaker",
+      "imagelink": "https://picsum.photos/200/100?random=105",
+      "stock": 10
+    },
+    {
+      "pId": 5,
+      "name": "Wireless Earbuds",
+      "description": "High-quality electronic device with advanced features.",
+      "category": "Electronics",
+      "price": 2999,
+      "tags": "Bluetooth, Gadget, Portable, Wireless",
+      "imagelink": "https://picsum.photos/200/100?random=106",
+      "stock": 10
+    },
+    {
+      "pId": 6,
+      "name": "Denim Jacket",
+      "description": "Trendy and comfortable fashion item for daily wear.",
+      "category": "Fashion",
+      "price": 4999,
+      "tags": "Clothing, Stylish, Casual, Comfortable",
+      "imagelink": "https://picsum.photos/200/100?random=2",
+      "stock": 10
+    },
+    {
+      "pId": 7,
+      "name": "Yoga Mat",
+      "description": "Durable and reliable sports gear for active lifestyle.",
+      "category": "Sports",
+      "price": 1499,
+      "tags": "Fitness, Training, Exercise, Gear",
+      "imagelink": "https://picsum.photos/200/100?random=3",
+      "stock": 10
+    },
+    {
+      "pId": 8,
+      "name": "Wireless Earbuds",
+      "description": "Compact Bluetooth earbuds with noise cancellation.",
+      "category": "Electronics",
+      "price": 2999,
+      "tags": "Bluetooth, Earbuds, Portable, Music",
+      "imagelink": "https://picsum.photos/200/100?random=201",
+      "stock": 10
+    },
+    {
+      "pId": 9,
+      "name": "Denim Jacket",
+      "description": "Trendy and comfortable fashion item for daily wear.",
+      "category": "Fashion",
+      "price": 4999,
+      "tags": "Clothing, Stylish, Casual, Comfortable",
+      "imagelink": "https://picsum.photos/200/100?random=202",
+      "stock": 10
+    },
+    {
+      "pId": 10,
+      "name": "Yoga Mat",
+      "description": "Eco-friendly yoga mat with non-slip surface.",
+      "category": "Sports",
+      "price": 1499,
+      "tags": "Yoga, Fitness, Training, Exercise",
+      "imagelink": "https://picsum.photos/200/100?random=203",
+      "stock": 10
+    },
+    {
+      "pId": 11,
+      "name": "Wooden Dining Table",
+      "description": "Classic 6-seater dining table made from solid oak wood.",
+      "category": "Home",
+      "price": 14999,
+      "tags": "Furniture, Dining, Wood, Home",
+      "imagelink": "https://picsum.photos/200/100?random=204",
+      "stock": 10
+    },
+    {
+      "pId": 12,
+      "name": "Running Shoes",
+      "description": "Lightweight running shoes designed for comfort and speed.",
+      "category": "Fashion",
+      "price": 5999,
+      "tags": "Shoes, Running, Sportswear, Comfortable",
+      "imagelink": "https://picsum.photos/200/100?random=205",
+      "stock": 10
+    },
+    {
+      "pId": 13,
+      "name": "Bluetooth Speaker",
+      "description": "Portable speaker with deep bass and waterproof design.",
+      "category": "Electronics",
+      "price": 3999,
+      "tags": "Bluetooth, Speaker, Portable, Waterproof",
+      "imagelink": "https://picsum.photos/200/100?random=206",
+      "stock": 10
+    },
+    {
+      "pId": 14,
+      "name": "Cookware Set",
+      "description": "Non-stick cookware set for everyday cooking.",
+      "category": "Home",
+      "price": 7999,
+      "tags": "Kitchen, Cooking, Non-stick, Durable",
+      "imagelink": "https://picsum.photos/200/100?random=207",
+      "stock": 10
+    },
+    {
+      "pId": 15,
+      "name": "Children’s Story Book",
+      "description": "Illustrated story book for kids aged 5-8.",
+      "category": "Books",
+      "price": 499,
+      "tags": "Kids, Story, Reading, Illustrated",
+      "imagelink": "https://picsum.photos/200/100?random=208",
+      "stock": 10
+    },
+    {
+      "pId": 16,
+      "name": "Toy Car",
+      "description": "Durable toy car with realistic design for children.",
+      "category": "Toys",
+      "price": 899,
+      "tags": "Toy, Car, Kids, Durable",
+      "imagelink": "https://picsum.photos/200/100?random=209",
+      "stock": 10
+    },
+    {
+      "pId": 17,
+      "name": "Organic Apples",
+      "description": "Fresh organic apples sourced from local farms.",
+      "category": "Groceries",
+      "price": 299,
+      "tags": "Fruit, Organic, Healthy, Fresh",
+      "imagelink": "https://picsum.photos/200/100?random=210",
+      "stock": 10
+    }
+]

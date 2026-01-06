@@ -1,0 +1,97 @@
+/* Styles for AddProduct form inspired by cart.css */
+.product-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 6px;
+}
+
+.product-header {
+  background: white;
+  padding: 12px 16px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  margin-bottom: 16px;
+}
+
+.product-header h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #131921;
+}
+
+.product-card {
+  background: white;
+  padding: 18px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  border: 1px solid #e6e6e6;
+}
+
+.product-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row label {
+  font-size: 13px;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.form-row input,
+.form-row textarea {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-row textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.full-width { grid-column: 1 / -1; }
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.btn {
+  padding: 10px 14px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: #ff9900;
+  color: white;
+}
+
+.btn-secondary {
+  background: white;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+.btn-primary:hover { background: #ff7a00; }
+.btn-secondary:hover { background: #fafafa; }
+
+@media (max-width: 768px) {
+  .product-form { grid-template-columns: 1fr; }
+}
