@@ -10,6 +10,7 @@ function Product({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
+  const { isLoggedIn, userType } = useSelector((state) => state.user);
   const cartItem = cartItems.find(item => item.productId === product.productId);
   const quantityAddedToCart = cartItem ? cartItem.quantity : 0;
   const canAddMore = product.stock > quantityAddedToCart;
@@ -38,10 +39,24 @@ function Product({ product }) {
     navigate(`/product/${product.productId}`);
   };
 
+  const handleEditProduct = (e) => {
+    e.stopPropagation();
+    navigate('/updateproduct', { state: { product } });
+  };
+
   return (
     <Card className="product-card-width">
       <div className="product-card-image-wrapper" onClick={handleNavigateToDetails}>
         <Card.Img variant="top" src={product.imageUrl} className="product-card-image" />
+        {isLoggedIn && userType === 'admin' && (
+          <button 
+            className="product-edit-btn"
+            onClick={handleEditProduct}
+            title="Edit product"
+          >
+            ✏️
+          </button>
+        )}
       </div>
       <Card.Body onClick={handleNavigateToDetails} className="product-card-body-clickable">
         <Card.Title className="product-card-title">{product.name}</Card.Title>
@@ -70,7 +85,7 @@ function Product({ product }) {
             {canAddMore ? "Add to cart" : "Out of stock"}
           </Button>
         ) : (
-          <div className="quantity-selector">
+          <div className="product-quantity-selector">
             <button 
               className="quantity-btn minus-btn" 
               onClick={handleDecrement}

@@ -3,7 +3,6 @@ import {
   createAsyncThunk,
   createSelector,
 } from "@reduxjs/toolkit";
-import productsdb from "./productsdb.json";
 
 const persisted = (() => {
   try {

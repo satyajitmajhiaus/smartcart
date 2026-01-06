@@ -1,11 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
 import { removeItem, updateQuantity } from "./cartSlice";
+import { useNavigate } from "react-router-dom";
 import "./cart.css";
 
 export default function Cart() {
   const cartItems = useSelector((state) => state.cart.items);
   const products = useSelector((state) => state.products.items);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   console.log("Cart items: ", cartItems);
   const totalPrice = cartItems.reduce((total, { productId, quantity }) => {
     const product = products.find((p) => p.productId === productId);
@@ -18,6 +21,11 @@ export default function Cart() {
     if (product && qty <= product.stock && qty > 0) {
       dispatch(updateQuantity({ productId, quantity: qty, stock: product.stock }));
     }
+  };
+
+    const handleNavigateToDetails = (productId) => {
+      console.log("Navigating to product details for ID:", productId);
+    navigate(`/product/${productId}`);
   };
 
   return (
@@ -38,14 +46,14 @@ export default function Cart() {
               if (!product) return null;
               return (
                 <div key={productId} className="cart-item">
-                  <div className="item-image">
+                  <div className="item-image" onClick={() => handleNavigateToDetails(productId)}>
                     <img src={product.imageUrl} alt={product.name} />
                   </div>
 
                   <div className="item-details">
-                    <h4 className="item-title">{product.name}</h4>
-                    <p className="item-description">{product.description}</p>
-                    <p className="item-stock">In Stock: {product.stock} available</p>
+                    <h4 className="item-title"  onClick={() => handleNavigateToDetails(productId)}>{product.name}</h4>
+                    <p className="item-description" onClick={() => handleNavigateToDetails(productId)}>{product.description}</p>
+                    <p className="item-stock"  onClick={() => handleNavigateToDetails(productId)}>In Stock: {product.stock} available</p>
 
                     <div className="item-controls">
                       <label>Quantity:</label>
