@@ -10,15 +10,15 @@ namespace SC_API.Controllers
     {
         private readonly IProductRepository _productRepository;
         public ProductController(IProductRepository productRepository)
-        { 
-            _productRepository = productRepository; 
+        {
+            _productRepository = productRepository;
         }
 
         [HttpGet("GetAllProducts")]
         public Task<IEnumerable<Product>> GetAllProducts()
         {
             Task<IEnumerable<Product>> actionResult = _productRepository.GetAllAsync();
-            return  actionResult;
+            return actionResult;
         }
 
         [HttpGet("GetProductsByCategoryID")]
@@ -28,10 +28,24 @@ namespace SC_API.Controllers
             return actionResult;
         }
 
-        [HttpGet]
+        [HttpGet("GetProductById")]
         public Task<Product?> GetProductById(int pId)
         {
             Task<Product?> actionResult = _productRepository.GetByIdAsync(pId);
+            return actionResult;
+        }
+
+        [HttpPost("AddProduct")]
+        public Task<int> AddProduct(Product product)
+        {
+            Task<int> actionResult = _productRepository.AddAsync(product);
+            return actionResult;
+        }
+
+        [HttpPost("UpdateProduct")]
+        public Task<bool> UpdateProduct(Product product)
+        {
+            Task<bool> actionResult = _productRepository.UpdateAsync(product);
             return actionResult;
         }
     }

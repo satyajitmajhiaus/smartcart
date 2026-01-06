@@ -1,9 +1,16 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectFilteredProducts, fetchProducts, deleteProduct } from "./productsSlice";
+import {
+  selectFilteredProducts,
+  fetchProducts,
+  deleteProduct,
+} from "./productsSlice";
 import Product from "./Product";
 import { Row, Col } from "react-bootstrap";
 import ProductFilters from "./ProductFilters";
+import { useNavigate } from "react-router-dom";
+import { FaPlus } from "react-icons/fa";
+
 import "./product.css";
 
 export default function ProductsList() {
@@ -11,11 +18,12 @@ export default function ProductsList() {
     (state) => state.products
   );
   console.log("All products in ProductsList: ", allproducts);
+  const { isLoggedIn, userType } = useSelector((state) => state.user);
   const products = useSelector(selectFilteredProducts);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   useEffect(() => {
-    dispatch(fetchProducts());    
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   return (
@@ -24,6 +32,15 @@ export default function ProductsList() {
       <div>
         <div className="cart-header">
           <h2>Product Catalog</h2>
+          {isLoggedIn && userType === "admin" && (
+            <div
+              className="add-product"
+              onClick={() => navigate("/addproduct")}
+            >
+              <FaPlus />
+              <span className="add-product-text">Add Product</span>
+            </div>
+          )}
         </div>
 
         {products.length === 0 ? (

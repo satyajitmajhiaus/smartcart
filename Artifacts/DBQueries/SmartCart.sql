@@ -1,4 +1,4 @@
-select * from Products
+select * from Products where Name like '%test%' order by CreatedAt desc
 select * from  Categories where ParentCategoryId is null
 select * from Currencies
 

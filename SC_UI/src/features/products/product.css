@@ -50,21 +50,21 @@
 }
 
 .product-edit-btn {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    background-color: white;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .product-edit-btn:hover {
@@ -155,7 +155,8 @@
   gap: 8px;
 }
 
-.apply-btn, .clear-btn {
+.apply-btn,
+.clear-btn {
   margin-top: 8px;
   padding: 8px 10px;
   background: #ff9900;
@@ -197,10 +198,12 @@
 
 .cart-header {
   background: white;
+  justify-content: space-between;
   padding: 16px 20px;
   margin-bottom: 16px;
   border-radius: 6px;
   border: 1px solid #e6e6e6;
+  display: flex;
 }
 
 .cart-header h2 {
@@ -262,4 +265,19 @@
   color: #333;
   min-width: 30px;
   text-align: center;
+}
+
+.add-product {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;  
+  gap: 8px;
+  border: 2px solid #ff9900;
+  border-radius: 4px;
+  padding: 6px 12px;  
+  background-color: #ff9900;
+  transition: all 0.2s ease;  
+  right: -1px;
+  font-weight: bold;
 }

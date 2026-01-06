@@ -58,9 +58,9 @@ namespace SC_Repository.Implementations
         public async Task<int> AddAsync(Product product)
         {
             var query = @"INSERT INTO Products (Name, Description, CategoryId, CurrencyCode, Price, Tags, ImageUrl,
-                          Stock, CreatedAt, ModifiedAt, IsInStock, PopularityScore, Rating, ReviewCount, SearchVector)
+                          Stock, CreatedAt, ModifiedAt, PopularityScore, Rating, ReviewCount)
                           VALUES (@Name, @Description, @CategoryId, @CurrencyCode, @Price, @Tags, @ImageUrl,
-                          @Stock, @CreatedAt, @ModifiedAt, @IsInStock, @PopularityScore, @Rating, @ReviewCount, @SearchVector);
+                          @Stock, @CreatedAt, @ModifiedAt, @PopularityScore, @Rating, @ReviewCount);
                           SELECT CAST(SCOPE_IDENTITY() as int);";
 
             using var connection = _context.CreateConnection();
@@ -71,8 +71,8 @@ namespace SC_Repository.Implementations
         {
             var query = @"UPDATE Products SET Name = @Name, Description = @Description, CategoryId = @CategoryId,
                           CurrencyCode = @CurrencyCode, Price = @Price, Tags = @Tags, ImageUrl = @ImageUrl,
-                          Stock = @Stock, ModifiedAt = @ModifiedAt, IsInStock = @IsInStock, PopularityScore = @PopularityScore,
-                          Rating = @Rating, ReviewCount = @ReviewCount, SearchVector = @SearchVector
+                          Stock = @Stock, ModifiedAt = @ModifiedAt, PopularityScore = @PopularityScore,
+                          Rating = @Rating, ReviewCount = @ReviewCount
                           WHERE ProductId = @ProductId";
 
             using var connection = _context.CreateConnection();

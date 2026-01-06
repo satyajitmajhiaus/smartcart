@@ -59,7 +59,7 @@ function Product({ product }) {
         )}
       </div>
       <Card.Body onClick={handleNavigateToDetails} className="product-card-body-clickable">
-        <Card.Title className="product-card-title">{product.name}</Card.Title>
+        <Card.Title className="product-card-title">{product.name.length > 22 ? `${product.name.substring(0, 22)}...` : product.name}</Card.Title>
         <div style={{ marginTop: 6 }}>
           {product.stock > 0 ? (
             <span className="product-stock-available">

@@ -1,42 +1,72 @@
 
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addProduct } from '../products/productsSlice';
 import './admin.css';
+import { useNavigate } from 'react-router-dom';
 
 const AddProduct = () => {
-    const dispatch = useDispatch();
-    const products = useSelector((state) => state.products.items || []);
+    const navigate = useNavigate();
 
     const [form, setForm] = useState({
         name: '',
         price: '',
         description: '',
-        category: '',
+        categoryId: '',
         stock: '',
         tags: '',
+        imageUrl: '',
     });
+
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((s) => ({ ...s, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const nextId = products && products.length ? Math.max(...products.map(p => p.id || 0)) + 1 : 1;
+        setLoading(true);
+        setMessage(null);
+
         const payload = {
-            id: nextId,
             name: form.name,
-            price: parseFloat(form.price) || 0,
             description: form.description,
-            category: form.category,
+            categoryId: parseInt(form.categoryId, 10) || 0,
+            currencyCode: 'INR',
+            price: parseFloat(form.price) || 0,
+            tags: form.tags,
+            imageUrl: form.imageUrl || 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?auto=compress&cs=tinysrgb&w=400',
             stock: parseInt(form.stock, 10) || 0,
-            tags: form.tags ? form.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+            createdAt: new Date().toISOString(),
+            modifiedAt: new Date().toISOString(),
+            popularityScore: 0,
+            rating: 0,
+            reviewCount: 0
         };
 
-        dispatch(addProduct(payload));
-        setForm({ name: '', price: '', description: '', category: '', stock: '', tags: '' });
+        try {
+            const res = await fetch('https://localhost:7150/api/Product/AddProduct', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || 'Failed to add product');
+            }
+
+            const data = await res.json();
+            setMessage('Product added successfully');
+            setForm({ name: '', price: '', description: '', categoryId: '', stock: '', tags: '', imageUrl: '' });
+            // navigate to product list or show message
+            setTimeout(() => navigate('/'), 800);
+        } catch (err) {
+            setMessage(`Error: ${err.message}`);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -63,8 +93,8 @@ const AddProduct = () => {
                     </div>
 
                     <div className="form-row">
-                        <label>Category</label>
-                        <input name="category" value={form.category} onChange={handleChange} required/>
+                        <label>Category Id</label>
+                        <input name="categoryId" type="number" value={form.categoryId} onChange={handleChange} required/>
                     </div>
 
                     <div className="form-row">
@@ -72,14 +102,21 @@ const AddProduct = () => {
                         <input name="stock" type="number" value={form.stock} onChange={handleChange} required/>
                     </div>
 
+                    <div className="form-row">
+                        <label>Image URL</label>
+                        <input name="imageUrl" value={form.imageUrl} onChange={handleChange} />
+                    </div>
+
                     <div className="form-row full-width">
                         <label>Tags (comma separated)</label>
                         <input name="tags" value={form.tags} onChange={handleChange} />
                     </div>
 
+                    {message && <div className="form-message">{message}</div>}
+
                     <div className="form-row full-width actions">
-                        <button type="submit" className="btn btn-primary">Add Product</button>
-                        <button type="button" className="btn btn-secondary" onClick={() => setForm({ name: '', price: '', description: '', category: '', stock: '', tags: '' })}>Clear</button>
+                        <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? 'Adding...' : 'Add Product'}</button>
+                        <button type="button" className="btn btn-secondary" onClick={() => setForm({ name: '', price: '', description: '', categoryId: '', stock: '', tags: '', imageUrl: '' })}>Clear</button>
                     </div>
                 </form>
             </div>
