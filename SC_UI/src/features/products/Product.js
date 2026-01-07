@@ -1,16 +1,21 @@
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import Modal from "react-bootstrap/Modal";
 import { addItem, removeItem } from "../cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { VscEdit } from "react-icons/vsc";
+import { deleteProduct } from "./productsSlice";
 
 import "./product.css";
 
 function Product({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [targetProduct, setTargetProduct] = useState(null);
   const cartItems = useSelector((state) => state.cart.items);
   const { isLoggedIn, userType } = useSelector((state) => state.user);
   const cartItem = cartItems.find(
@@ -49,8 +54,31 @@ function Product({ product }) {
   };
   const handleDeleteProduct = (e) =>{
     e.stopPropagation();
-    console.log("Delete product");    
+    setTargetProduct(product);
+    setShowConfirm(true);
   }
+
+  const confirmDelete = async () => {
+    if (!targetProduct) return;
+    const id = targetProduct.productId ?? targetProduct.id ?? targetProduct.pId;
+    try {
+      const resp = await fetch(`https://localhost:7150/api/Product?id=${id}`, {
+        method: "DELETE",
+      });
+      if (!resp.ok) {
+        const text = await resp.text();
+        alert(`Failed to delete product: ${resp.status} ${text}`);
+      } else {
+        dispatch(deleteProduct(id));
+      }
+    } catch (err) {
+      console.error("Delete request failed:", err);
+      alert("Failed to delete product. See console for details.");
+    } finally {
+      setShowConfirm(false);
+      setTargetProduct(null);
+    }
+  };
 
   return (
     <Card className="product-card-width">
@@ -135,6 +163,22 @@ function Product({ product }) {
           </div>
         )}
       </Card.Body>
+      <Modal show={showConfirm} onHide={() => setShowConfirm(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete the product '{targetProduct?.name}'?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowConfirm(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Card>
   );
 }

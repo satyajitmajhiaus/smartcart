@@ -88,7 +88,15 @@ const productsSlice = createSlice({
       }
     },
     deleteProduct(state, action) {
-      state.items = state.items.filter((p) => p.id !== action.payload);
+      const idToRemove = action.payload;
+      state.items = state.items.filter((p) => {
+        // handle different possible id field names returned by various sources
+        if (p.id !== undefined) return p.id !== idToRemove;
+        if (p.productId !== undefined) return p.productId !== idToRemove;
+        if (p.pId !== undefined) return p.pId !== idToRemove;
+        // fallback: if product is a primitive id stored directly
+        return p !== idToRemove;
+      });
       try {
         if (typeof window !== "undefined" && window.localStorage) {
           localStorage.setItem("products", JSON.stringify(state.items));
