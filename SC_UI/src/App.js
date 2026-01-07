@@ -10,6 +10,7 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import AddProduct from "./features/admin/AddProduct";
 import UpdateProduct from "./features/admin/UpdateProduct";
+import ProductsHome from "./features/products/ProductsHome";
 
 export default function App() {
   const [editingProduct, setEditingProduct] = useState(null);
@@ -20,10 +21,11 @@ export default function App() {
       <div className="main-content" style={{background: '#d5dde6ff'}}>
         <Container className="app-container">
           <Routes>
-            <Route path="/" element={<ProductsList />} />
+            <Route path="/" element={<ProductsHome />} />
             <Route path="/product/:productId" element={<ProductDetails />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/addproduct" element={<AddProduct/>} />
+            <Route path="/category/:categoryId" element={<ProductsList/>} />
             <Route path="/updateproduct" element={<UpdateProduct/>} />
           </Routes>
         </Container>

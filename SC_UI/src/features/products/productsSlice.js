@@ -3,6 +3,7 @@ import {
   createAsyncThunk,
   createSelector,
 } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 
 const persisted = (() => {
   try {
@@ -15,6 +16,23 @@ const persisted = (() => {
   }
   return null;
 })();
+
+export const fetchPopularProducts = createAsyncThunk(
+  "products/fetchPopularProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`https://localhost:7150/api/Product/GetPopolarProducts`);
+      if (!response.ok) {
+        return rejectWithValue("Failed to fetch popular products");
+      }
+      const data = await response.json();
+      console.log("Fetched popular products", data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
@@ -51,6 +69,7 @@ export const fetchProductsByCategory = createAsyncThunk(
 );
 
 const initialState = {
+  popularProducts: [],
   items: persisted,
   status: "idle",
   loading: false,
@@ -140,6 +159,23 @@ const productsSlice = createSlice({
         } catch (e) {}
       })
       .addCase(fetchProductsByCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchPopularProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPopularProducts.fulfilled, (state, action) => {
+        state.loading = false;    
+        state.popularProducts = action.payload;
+        try {
+          if (typeof window !== "undefined" && window.localStorage) {
+            localStorage.setItem("popularProducts", JSON.stringify(state.popularProducts));
+          }
+        } catch (e) {}
+      })
+      .addCase(fetchPopularProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -1,4 +1,4 @@
-select * from Products where Name like '%test%' order by CreatedAt desc
+select * from Products where PopularityScore >= 90 --Name like '%test%' order by CreatedAt desc
 select * from  Categories where ParentCategoryId is null
 select * from Currencies
 

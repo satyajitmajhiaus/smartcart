@@ -21,6 +21,13 @@ namespace SC_API.Controllers
             return actionResult;
         }
 
+        [HttpGet("GetPopolarProducts")]
+        public Task<IEnumerable<Product>> GetPopolarProducts()
+        {
+            Task<IEnumerable<Product>> actionResult = _productRepository.GetPopolarProductsAsync();
+            return actionResult;
+        }
+
         [HttpGet("GetProductsByCategoryID")]
         public Task<IEnumerable<Product>> GetProductsByCategoryID(int categoryId)
         {

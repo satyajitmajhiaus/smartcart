@@ -2,10 +2,12 @@ import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "./categoriesSlice";
 import { fetchProductsByCategory } from "../products/productsSlice";
+import { useNavigate } from "react-router-dom";
 import "./categories.css";
 
 function Categories() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { items: categories, loading, error } = useSelector(
     (state) => state.categories
   );
@@ -27,6 +29,7 @@ function Categories() {
 
   const handleClickCategory = (category) => {
     console.log(`Fetching products for category: ${category.name}`);
+    navigate(`/category/${category.name}`, { state: { category } });
     dispatch(fetchProductsByCategory(category.categoryId));
   };
 

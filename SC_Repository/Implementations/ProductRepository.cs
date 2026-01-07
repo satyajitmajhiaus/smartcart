@@ -21,7 +21,12 @@ namespace SC_Repository.Implementations
             using var connection = _context.CreateConnection();
             return await connection.QueryAsync<Product>(query);
         }
-
+        public async Task<IEnumerable<Product>> GetPopolarProductsAsync()
+        {
+            var query = "select * from Products where PopularityScore >= 90";
+            using var connection = _context.CreateConnection();
+            return await connection.QueryAsync<Product>(query);
+        }
         public async Task<IEnumerable<Product>> GetProductsByCategoryIDAsync(int categoryId)
         {
             var query = "select * from Products where  CategoryId = " + categoryId + "or CategoryId in (select CategoryId from  Categories where ParentCategoryId = " + categoryId + ")";
