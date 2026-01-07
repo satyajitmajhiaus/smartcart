@@ -3,15 +3,19 @@ import Card from "react-bootstrap/Card";
 import { addItem, removeItem } from "../cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import './product.css';
+import { RiDeleteBinLine } from "react-icons/ri";
+import { VscEdit } from "react-icons/vsc";
 
+import "./product.css";
 
 function Product({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
   const { isLoggedIn, userType } = useSelector((state) => state.user);
-  const cartItem = cartItems.find(item => item.productId === product.productId);
+  const cartItem = cartItems.find(
+    (item) => item.productId === product.productId
+  );
   const quantityAddedToCart = cartItem ? cartItem.quantity : 0;
   const canAddMore = product.stock > quantityAddedToCart;
 
@@ -41,37 +45,64 @@ function Product({ product }) {
 
   const handleEditProduct = (e) => {
     e.stopPropagation();
-    navigate('/updateproduct', { state: { product } });
+    navigate("/updateproduct", { state: { product } });
   };
+  const handleDeleteProduct = (e) =>{
+    e.stopPropagation();
+    console.log("Delete product");    
+  }
 
   return (
     <Card className="product-card-width">
-      <div className="product-card-image-wrapper" onClick={handleNavigateToDetails}>
-        <Card.Img variant="top" src={product.imageUrl} className="product-card-image" />
-        {isLoggedIn && userType === 'admin' && (
-          <button 
-            className="product-edit-btn"
-            onClick={handleEditProduct}
-            title="Edit product"
-          >
-            ✏️
-          </button>
+      <div
+        className="product-card-image-wrapper"
+        onClick={handleNavigateToDetails}
+      >
+        <Card.Img
+          variant="top"
+          src={product.imageUrl}
+          className="product-card-image"
+        />
+        {isLoggedIn && userType === "admin" && (
+          <div className="admin-controls">
+            <button
+              className="product-edit-btn"
+              onClick={handleEditProduct}
+              title="Edit product"
+            >
+              <VscEdit/>
+            </button>
+            <button
+              className="product-edit-btn"
+              onClick={handleDeleteProduct}
+              title="Delete product"
+            >
+              <RiDeleteBinLine />
+            </button>
+          </div>
         )}
       </div>
-      <Card.Body onClick={handleNavigateToDetails} className="product-card-body-clickable">
-        <Card.Title className="product-card-title">{product.name.length > 22 ? `${product.name.substring(0, 22)}...` : product.name}</Card.Title>
+      <Card.Body
+        onClick={handleNavigateToDetails}
+        className="product-card-body-clickable"
+      >
+        <Card.Title className="product-card-title">
+          {product.name.length > 22
+            ? `${product.name.substring(0, 22)}...`
+            : product.name}
+        </Card.Title>
         <div style={{ marginTop: 6 }}>
           {product.stock > 0 ? (
             <span className="product-stock-available">
               In stock: {product.stock}
             </span>
           ) : (
-            <span className="product-stock-out-of-stock">
-              Out of stock
-            </span>
+            <span className="product-stock-out-of-stock">Out of stock</span>
           )}
         </div>
-        <Card.Text className="product-card-description">{product.description}</Card.Text>
+        <Card.Text className="product-card-description">
+          {product.description}
+        </Card.Text>
         <div className="product-price">₹{product.price.toFixed(2)}</div>
       </Card.Body>
       <Card.Body className="product-card-actions">
@@ -86,16 +117,16 @@ function Product({ product }) {
           </Button>
         ) : (
           <div className="product-quantity-selector">
-            <button 
-              className="quantity-btn minus-btn" 
+            <button
+              className="quantity-btn minus-btn"
               onClick={handleDecrement}
               disabled={quantityAddedToCart === 0}
             >
               −
             </button>
             <span className="quantity-display">{quantityAddedToCart}</span>
-            <button 
-              className="quantity-btn plus-btn" 
+            <button
+              className="quantity-btn plus-btn"
               onClick={handleIncrement}
               disabled={!canAddMore}
             >

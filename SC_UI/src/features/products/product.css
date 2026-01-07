@@ -35,13 +35,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 150px;
+  /* height: 150px; */
   position: relative;
 }
 
 .product-card-image {
   object-fit: contain;
   cursor: pointer;
+  height: 150px;
   transition: transform 0.3s ease;
 }
 
@@ -49,10 +50,15 @@
   transform: scale(1.05);
 }
 
-.product-edit-btn {
+.admin-controls {
   position: absolute;
   top: 6px;
   right: 6px;
+  display: flex;
+  gap: 3px;
+}
+
+.product-edit-btn {
   background-color: white;
   border: none;
   border-radius: 50%;
@@ -68,7 +74,7 @@
 }
 
 .product-edit-btn:hover {
-  background-color: rgba(0, 86, 179, 0.9);
+  background-color: #ff9900;
   transform: scale(1.1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
@@ -112,12 +118,13 @@
   font-size: 15px;
   font-weight: 700;
   color: #000000;
-  margin-top: 8px;
-  margin-bottom: 10px;
+  /* margin-top: 8px;
+  margin-bottom: 10px; */
 }
 
 .product-card-actions {
-  padding: 10px !important;
+  /* padding: 10px !important; */
+  padding: 5px 25px 5px 25px;
   border-top: 1px solid #e6e6e6;
 }
 
@@ -271,13 +278,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;  
+  cursor: pointer;
   gap: 8px;
   border: 2px solid #ff9900;
   border-radius: 4px;
-  padding: 6px 12px;  
+  padding: 6px 12px;
   background-color: #ff9900;
-  transition: all 0.2s ease;  
+  transition: all 0.2s ease;
   right: -1px;
   font-weight: bold;
 }

@@ -13,6 +13,8 @@
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .product-header h2 {

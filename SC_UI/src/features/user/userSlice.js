@@ -23,6 +23,11 @@ const userSlice = createSlice({
       state.userType = null;
       state.userName = null;
       state.email = null;
+      try {
+        localStorage.removeItem('user');
+      } catch (err) {
+        console.warn('Failed to clear persisted user on logout:', err);
+      }
     },
   },
 });

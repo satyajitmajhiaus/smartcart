@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addItem } from "../cart/cartSlice";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { FaArrowLeft, FaShoppingCart } from "react-icons/fa";
+import { FaArrowLeft, FaShoppingCart, FaPlus } from "react-icons/fa";
 import "./productDetails.css";
 
 export default function ProductDetails() {
@@ -12,6 +12,7 @@ export default function ProductDetails() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.items);
   const cartItems = useSelector((state) => state.cart.items);
+  const { isLoggedIn, userType } = useSelector((state) => state.user);
 
   const product = products.find((p) => p.productId === parseInt(productId));
   const [quantity, setQuantity] = useState(1);
@@ -70,6 +71,15 @@ export default function ProductDetails() {
     <>
       <div className="cart-header">
         <h2>Product Details</h2>
+        {isLoggedIn && userType === "admin" && (
+                    <div
+                      className="add-product"
+                      onClick={() => navigate('/updateproduct', { state: { product } })}
+                    >
+                      <FaPlus />
+                      <span className="add-product-text">Update Product</span>
+                    </div>
+                  )}
       </div>
       <div className="back-button">
         <Button

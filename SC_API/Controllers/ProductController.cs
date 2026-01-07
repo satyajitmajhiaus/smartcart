@@ -48,5 +48,12 @@ namespace SC_API.Controllers
             Task<bool> actionResult = _productRepository.UpdateAsync(product);
             return actionResult;
         }
+
+        [HttpDelete]
+        public Task<bool> DeleteProduct(int id)
+        {
+            Task<bool> actionResult = _productRepository.DeleteAsync(id);
+            return actionResult;
+        }
     }
 }
