@@ -10,6 +10,8 @@ namespace SC_Repository.Interfaces
     {
         Task<IEnumerable<Product>> GetAllAsync();
         Task<IEnumerable<Product>> GetPopolarProductsAsync();
+        Task<IEnumerable<Product>> SearchProductsAsync(string query);
+        
         Task<IEnumerable<Product>> GetProductsByCategoryIDAsync(int categoryId);
         
         Task<Product?> GetByIdAsync(int id);

@@ -14,6 +14,12 @@ namespace SC_Repository.Implementations
         {
             _context = context;
         }
+        public async Task<IEnumerable<Product>> SearchProductsAsync(string query)
+        {
+            var sqlQuery = "SELECT * FROM Products where SearchVector like '%"+ query +"%'";
+            using var connection = _context.CreateConnection();
+            return await connection.QueryAsync<Product>(sqlQuery);
+        }
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {

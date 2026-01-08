@@ -9,6 +9,16 @@ export default function ProductFilters() {
   const filters = useSelector((state) => state.products.filters);
   const categories = useSelector((state) => state.categories.items);
 
+  const categoriesFromProducts = useMemo(() => {
+    const s = new Set();
+    if (!products) return [];
+    products.forEach((p) => {
+      if (p.category) s.add(p.category);
+    });
+    return Array.from(s);
+  }, [products]);
+console.log("Categories from products: ", categoriesFromProducts);
+
   const tags = useMemo(() => {
     const s = new Set();
     if (!products) return [];
@@ -58,9 +68,14 @@ export default function ProductFilters() {
         <label>Category</label>
         <select value={filters.category} onChange={changeCategory}>
           <option key="all" value="">All</option>
-          {(categories || []).map((c) => (
-            <option key={c.categoryId ?? c.name} value={c.name}>{c.name}</option>
-          ))}
+          {
+            // Prefer categories derived from the current products (search results)
+            // otherwise fall back to the full categories list from state.
+            (categoriesFromProducts.length ? categoriesFromProducts : (categories || []).map(c => c.name || c))
+              .map((cName) => (
+                <option key={cName} value={cName}>{cName}</option>
+              ))
+          }
         </select>
       </div>
 

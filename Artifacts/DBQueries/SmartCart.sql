@@ -1,6 +1,7 @@
-select * from Products where PopularityScore >= 90 --Name like '%test%' order by CreatedAt desc
+select *,SearchVector from Products where PopularityScore >= 90 --Name like '%test%' order by CreatedAt desc
 select * from  Categories where ParentCategoryId is null
 select * from Currencies
+SELECT * FROM Products where SearchVector like '%samsung%'
 
 
 select * from Products where CategoryId in (select CategoryId from  Categories where ParentCategoryId = 142)

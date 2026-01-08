@@ -1,37 +1,33 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  selectFilteredProducts,
-  fetchProducts,
+import {  
+  fetchPopularProducts,
   deleteProduct,
 } from "./productsSlice";
 import Product from "./Product";
 import { Row, Col } from "react-bootstrap";
-import ProductFilters from "./ProductFilters";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
+import "./ProductsPopular.css";
 
-import "./product.css";
-
-export default function ProductsList() {
+export default function ProductsPopular() {
   const { allproducts, loading, error } = useSelector(
     (state) => state.products
   );
   console.log("All products in ProductsList: ", allproducts);
   const { isLoggedIn, userType } = useSelector((state) => state.user);
-  const products = useSelector(selectFilteredProducts);
+  const popularProducts = useSelector((state) => state.products.popularProducts);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    dispatch(fetchPopularProducts());
+  }, []);
 
   return (
-    <div className="products-page">
-      <ProductFilters />
+    <div>
       <div>
-        <div className="cart-header">
-          <h2>Product Catalog</h2>
+        <div className="product-header">
+          <h2>Popular Products</h2>
           {isLoggedIn && userType === "admin" && (
             <div
               className="add-product"
@@ -43,15 +39,15 @@ export default function ProductsList() {
           )}
         </div>
 
-        {products.length === 0 ? (
+        {popularProducts.length === 0 ? (
           <div className="empty-cart">
             <p>No products found.</p>
           </div>
         ) : (
           <div className="products-grid">
             <Row className="g-4">
-              {products.map((product, index) => (
-                <Col key={index} xs={12} sm={6} md={4} lg={3}>
+              {popularProducts.map((product, index) => (
+                <Col key={index} xs={12} sm={6} md={3} lg={2}>
                   <Product product={product} />
                 </Col>
               ))}

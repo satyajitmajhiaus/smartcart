@@ -1,13 +1,16 @@
-import React, { useState, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setFilters } from '../products/productsSlice';
-import { BsSearch } from 'react-icons/bs';
-import '../menu/Navbar.css';
+import React, { useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilters } from "../products/productsSlice";
+import { BsSearch } from "react-icons/bs";
+import { fetchProductsByQuery } from "../products/productsSlice";
+import { useNavigate } from "react-router-dom";
+import "../menu/Navbar.css";
 
 export default function SearchBar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const products = useSelector((state) => state.products.items);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const suggestions = useMemo(() => {
@@ -37,13 +40,16 @@ export default function SearchBar() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!query.trim()) return;
-    dispatch(setFilters({ search: query }));
+    // dispatch(setFilters({ search: query }));
+    navigate(`/search?k=${query.toLowerCase()}`, { state: { query } });
+    dispatch(fetchProductsByQuery(query));
     setShowSuggestions(false);
   };
 
   const handleSuggestionClick = (name) => {
     setQuery(name);
-    dispatch(setFilters({ search: name }));
+    navigate(`/search?k=${query}`, { state: { query } });
+    dispatch(fetchProductsByQuery(query));
     setShowSuggestions(false);
   };
 
@@ -61,7 +67,11 @@ export default function SearchBar() {
           onChange={handleChange}
           onFocus={() => query && setShowSuggestions(true)}
         />
-        <button className="nav-search-btn" type="submit" aria-label="Search button">
+        <button
+          className="nav-search-btn"
+          type="submit"
+          aria-label="Search button"
+        >
           <BsSearch />
         </button>
 

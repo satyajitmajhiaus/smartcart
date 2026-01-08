@@ -5,23 +5,13 @@ import {
 } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
 
-const persisted = (() => {
-  try {
-    if (typeof window !== "undefined" && window.localStorage) {
-      const raw = localStorage.getItem("products");
-      return raw ? JSON.parse(raw) : null;
-    }
-  } catch (e) {
-    // ignore parse errors
-  }
-  return null;
-})();
-
 export const fetchPopularProducts = createAsyncThunk(
   "products/fetchPopularProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`https://localhost:7150/api/Product/GetPopolarProducts`);
+      const response = await fetch(
+        `https://localhost:7150/api/Product/GetPopolarProducts`
+      );
       if (!response.ok) {
         return rejectWithValue("Failed to fetch popular products");
       }
@@ -34,34 +24,69 @@ export const fetchPopularProducts = createAsyncThunk(
   }
 );
 
-export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetch("https://localhost:7150/api/Product/GetAllProducts");
-      if (!response.ok) {
-        return rejectWithValue("Failed to fetch products");
-      }
-      const data = await response.json();
-      console.log("Fetched products data: ", data);
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+// export const fetchProductsByQuery = createAsyncThunk(
+//   "products/fetchProductsByQuery",
+//   async (query, { rejectWithValue }) => {
+//     try {
+//       if (window.location.search.includes("?k=")) {
+//         const response = await fetch(
+//           `https://localhost:7150/api/Product/SearchProducts?query=${query}`
+//         );
+//         if (!response.ok) {
+//           return rejectWithValue("Failed to fetch products");
+//         }
+//         const data = await response.json();
+//         console.log("Fetched products data: ", data);
+//         return data;
+//       } else {
+//         const response = await fetch(
+//           `https://localhost:7150/api/Product/GetProductsByCategoryID?categoryId=${query}`
+//         );
+//         console.log("URL does not contain ?k=");
+//         if (!response.ok) {
+//           return rejectWithValue("Failed to fetch products");
+//         }
+//         const data = await response.json();
+//         console.log("Fetched products data: ", data);
+//         return data;
+//       }
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
 
-export const fetchProductsByCategory = createAsyncThunk(
-  "products/fetchProductsByCategory",
-  async (categoryId, { rejectWithValue }) => {
+export const fetchProductsByQuery = createAsyncThunk(
+  "products/fetchProductsByQuery",
+    async (query, { rejectWithValue }) => {
     try {
-      const response = await fetch(`https://localhost:7150/api/Product/GetProductsByCategoryID?categoryId=${categoryId}`);
-      if (!response.ok) {
-        return rejectWithValue("Failed to fetch products by category");
+      // Check if this is a search query or category query
+      const isSearchQuery = window.location.pathname.includes("/search");
+      
+      if (isSearchQuery && query) {
+        console.log("Fetching products by search query - ", query);
+        const response = await fetch(
+          `https://localhost:7150/api/Product/SearchProducts?query=${query}`
+        );
+        if (!response.ok) {
+          return rejectWithValue("Failed to fetch products");
+        }
+        const data = await response.json();
+        console.log("Fetched search products data: ", data);
+        return data;
+      } else if (query) {
+        // Category query
+        const response = await fetch(
+          `https://localhost:7150/api/Product/GetProductsByCategoryID?categoryId=${query}`
+        );
+        console.log("Fetching products by category");
+        if (!response.ok) {
+          return rejectWithValue("Failed to fetch products");
+        }
+        const data = await response.json();
+        console.log("Fetched category products data: ", data);
+        return data;
       }
-      const data = await response.json();
-      console.log("Fetched products by category: ", data);
-      return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -70,7 +95,7 @@ export const fetchProductsByCategory = createAsyncThunk(
 
 const initialState = {
   popularProducts: [],
-  items: persisted,
+  items: [],
   status: "idle",
   loading: false,
   error: null,
@@ -128,12 +153,29 @@ const productsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProducts.pending, (state) => {  
+      // .addCase(fetchProductsByQuery.pending, (state) => {
+      //   state.loading = true;
+      //   state.error = null;
+      // })
+      // .addCase(fetchProductsByQuery.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   state.items = action.payload;
+      //   try {
+      //     if (typeof window !== "undefined" && window.localStorage) {
+      //       localStorage.setItem("products", JSON.stringify(state.items));
+      //     }
+      //   } catch (e) {}
+      // })
+      // .addCase(fetchProductsByQuery.rejected, (state, action) => {
+      //   state.loading = false;
+      //   state.error = action.payload;
+      // })
+      .addCase(fetchProductsByQuery.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.loading = false;  
+      .addCase(fetchProductsByQuery.fulfilled, (state, action) => {
+        state.loading = false;
         state.items = action.payload;
         try {
           if (typeof window !== "undefined" && window.localStorage) {
@@ -141,24 +183,7 @@ const productsSlice = createSlice({
           }
         } catch (e) {}
       })
-      .addCase(fetchProducts.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(fetchProductsByCategory.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
-        state.loading = false;
-        state.items = action.payload;
-        try {
-          if (typeof window !== "undefined" && window.localStorage) {
-            localStorage.setItem("products", JSON.stringify(state.items));
-          }
-        } catch (e) {}
-      })
-      .addCase(fetchProductsByCategory.rejected, (state, action) => {
+      .addCase(fetchProductsByQuery.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
@@ -167,11 +192,14 @@ const productsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchPopularProducts.fulfilled, (state, action) => {
-        state.loading = false;    
+        state.loading = false;
         state.popularProducts = action.payload;
         try {
           if (typeof window !== "undefined" && window.localStorage) {
-            localStorage.setItem("popularProducts", JSON.stringify(state.popularProducts));
+            localStorage.setItem(
+              "popularProducts",
+              JSON.stringify(state.popularProducts)
+            );
           }
         } catch (e) {}
       })

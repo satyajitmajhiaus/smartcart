@@ -1,33 +1,43 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {  
-  fetchPopularProducts,
+import {
+  selectFilteredProducts,
+  fetchProductsByQuery,
   deleteProduct,
 } from "./productsSlice";
 import Product from "./Product";
 import { Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import ProductFilters from "./ProductFilters";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
-import "./productsHome.css";
 
-export default function ProductsHome() {
+import "./product.css";
+
+export default function ProductsSearch() {
   const { allproducts, loading, error } = useSelector(
     (state) => state.products
   );
+  const [searchParams] = useSearchParams();
+  const { categoryId } = useParams();
+  
   console.log("All products in ProductsList: ", allproducts);
   const { isLoggedIn, userType } = useSelector((state) => state.user);
-  const popularProducts = useSelector((state) => state.products.popularProducts);
+  const products = useSelector(selectFilteredProducts);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   useEffect(() => {
-    dispatch(fetchPopularProducts());
-  }, [dispatch]);
+    // Get query parameter from search (e.g., ?k=sam) or category parameter
+    const query = searchParams.get("k") || categoryId;
+    dispatch(fetchProductsByQuery(query));
+  }, [dispatch, searchParams, categoryId]);
 
   return (
-    <div>
+    <div className="products-page">
+      <ProductFilters />
       <div>
-        <div className="product-header">
-          <h2>Popular Products</h2>
+        <div className="cart-header">
+          <h2>Product Catalog</h2>
           {isLoggedIn && userType === "admin" && (
             <div
               className="add-product"
@@ -39,15 +49,15 @@ export default function ProductsHome() {
           )}
         </div>
 
-        {popularProducts.length === 0 ? (
+        {products.length === 0 ? (
           <div className="empty-cart">
             <p>No products found.</p>
           </div>
         ) : (
           <div className="products-grid">
             <Row className="g-4">
-              {popularProducts.map((product, index) => (
-                <Col key={index} xs={12} sm={6} md={3} lg={2}>
+              {products.map((product, index) => (
+                <Col key={index} xs={12} sm={6} md={4} lg={3}>
                   <Product product={product} />
                 </Col>
               ))}

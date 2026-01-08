@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SC_Repository.DbContext;
 using SC_Repository.Implementations;
 using SC_Repository.Interfaces;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,8 @@ builder.Services.AddCors(options =>
             policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
         });
     });
-
+// Add Redis connection
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect("localhost:6379"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

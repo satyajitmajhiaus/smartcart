@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "./categoriesSlice";
-import { fetchProductsByCategory } from "../products/productsSlice";
+import { fetchProductsByQuery } from "../products/productsSlice";
 import { useNavigate } from "react-router-dom";
 import "./categories.css";
 
@@ -29,8 +29,8 @@ function Categories() {
 
   const handleClickCategory = (category) => {
     console.log(`Fetching products for category: ${category.name}`);
-    navigate(`/category/${category.name}`, { state: { category } });
-    dispatch(fetchProductsByCategory(category.categoryId));
+    navigate(`/category/${category.name.replace(/\s+/g, "-").toLowerCase()}`, { state: { category } });
+    dispatch(fetchProductsByQuery(category.categoryId));
   };
 
   const checkScrollPosition = () => {
@@ -72,7 +72,7 @@ function Categories() {
 
   useEffect(() => {
     dispatch(fetchCategories());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     // Check scroll position when container size changes

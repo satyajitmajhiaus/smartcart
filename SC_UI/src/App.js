@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import ProductsList from "./features/products/ProductsList";
+import ProductsSearch from "./features/products/ProductsSearch";
 import ProductDetails from "./features/products/ProductDetails";
-import ProductForm from "./features/products/ProductForm";
-import ProductFilters from "./features/products/ProductFilters";
 import Cart from "./features/cart/Cart";
 import Menu from "./features/menu/Navbar";
 import { Container } from "react-bootstrap";
@@ -10,10 +8,9 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import AddProduct from "./features/admin/AddProduct";
 import UpdateProduct from "./features/admin/UpdateProduct";
-import ProductsHome from "./features/products/ProductsHome";
+import ProductsPopular from "./features/products/ProductsPopular";
 
 export default function App() {
-  const [editingProduct, setEditingProduct] = useState(null);
 
   return (
     <>
@@ -21,11 +18,12 @@ export default function App() {
       <div className="main-content" style={{background: '#d5dde6ff'}}>
         <Container className="app-container">
           <Routes>
-            <Route path="/" element={<ProductsHome />} />
+            <Route path="/" element={<ProductsPopular />} />
             <Route path="/product/:productId" element={<ProductDetails />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/addproduct" element={<AddProduct/>} />
-            <Route path="/category/:categoryId" element={<ProductsList/>} />
+            <Route path="/category/:categoryId" element={<ProductsSearch/>} />
+            <Route path="/search" element={<ProductsSearch/>} />
             <Route path="/updateproduct" element={<UpdateProduct/>} />
           </Routes>
         </Container>
