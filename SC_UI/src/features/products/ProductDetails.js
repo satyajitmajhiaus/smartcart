@@ -81,7 +81,8 @@ export default function ProductDetails() {
                     </div>
                   )}
       </div>
-      <div className="back-button">
+
+      {/* <div className="back-button">
         <Button
           variant="link"
           onClick={() => navigate("/")}
@@ -89,7 +90,7 @@ export default function ProductDetails() {
         >
           <FaArrowLeft /> Back to Products
         </Button>
-      </div>
+      </div> */}
 
       <div className="product-details-wrapper">
         <Row className="product-details-row">

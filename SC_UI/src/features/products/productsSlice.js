@@ -3,7 +3,6 @@ import {
   createAsyncThunk,
   createSelector,
 } from "@reduxjs/toolkit";
-import { useNavigate } from "react-router-dom";
 
 export const fetchPopularProducts = createAsyncThunk(
   "products/fetchPopularProducts",
@@ -66,7 +65,7 @@ export const fetchProductsByQuery = createAsyncThunk(
       if (isSearchQuery && query) {
         console.log("Fetching products by search query - ", query);
         const response = await fetch(
-          `https://localhost:7150/api/Product/SearchProducts?query=${query}`
+          `https://localhost:7150/api/Product/SearchProducts?query=${encodeURIComponent(query)}`
         );
         if (!response.ok) {
           return rejectWithValue("Failed to fetch products");
@@ -76,6 +75,7 @@ export const fetchProductsByQuery = createAsyncThunk(
         return data;
       } else if (query) {
         // Category query
+        console.log("Fetching products by category ID - ", query);
         const response = await fetch(
           `https://localhost:7150/api/Product/GetProductsByCategoryID?categoryId=${query}`
         );
@@ -84,7 +84,6 @@ export const fetchProductsByQuery = createAsyncThunk(
           return rejectWithValue("Failed to fetch products");
         }
         const data = await response.json();
-        console.log("Fetched category products data: ", data);
         return data;
       }
     } catch (error) {
@@ -99,8 +98,8 @@ const initialState = {
   status: "idle",
   loading: false,
   error: null,
+  searchQuery: "",
   filters: {
-    search: "",
     category: "",
     priceRange: [0, Infinity],
     tags: [],
@@ -217,24 +216,38 @@ export const selectFilteredProducts = createSelector(
   (items, filters) => {
     if (!items) return [];
     return items.filter((product) => {
-      const matchesSearch =
-        product.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-        product.description
-          .toLowerCase()
-          .includes(filters.search.toLowerCase());
-      const matchesCategory = filters.category
-        ? product.category === filters.category
-        : true;
+      // allow filters.category to be either a category id or a category name
+      let matchesCategory = true;
+      if (filters.category) {
+        const fc = String(filters.category);
+        // product may have categoryId, category, or category object
+        const pid = product.categoryId ?? product.category_id ?? product.catId ?? product.pCategoryId ?? null;
+        if (pid != null && String(pid) === fc) matchesCategory = true;
+        else if (product.category && typeof product.category === 'string' && String(product.category) === fc) matchesCategory = true;
+        else if (product.category && typeof product.category === 'object') {
+          const pcId = product.category.categoryId ?? product.category.id ?? product.category.value ?? null;
+          const pcName = product.category.name ?? product.category.title ?? product.category.label ?? null;
+          if ((pcId != null && String(pcId) === fc) || (pcName && String(pcName) === fc)) matchesCategory = true;
+        } else matchesCategory = false;
+      }
+
       const matchesPrice =
-        product.price >= filters.priceRange[0] &&
-        product.price <= filters.priceRange[1];
+        (product.price ?? 0) >= filters.priceRange[0] &&
+        (product.price ?? 0) <= filters.priceRange[1];
+
+      // normalize product tags to array
+      const productTags = Array.isArray(product.tags)
+        ? product.tags
+        : product.tags
+        ? String(product.tags).split(',').map((t) => t.trim())
+        : [];
       const matchesTags =
         filters.tags.length === 0 ||
-        filters.tags.every((tag) => product.tags.includes(tag));
-      const matchesStock = filters.inStockOnly ? product.stock > 0 : true;
+        filters.tags.some((tag) => productTags.includes(tag));
+
+      const matchesStock = filters.inStockOnly ? (product.stock ?? 0) > 0 : true;
 
       return (
-        matchesSearch &&
         matchesCategory &&
         matchesPrice &&
         matchesTags &&

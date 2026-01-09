@@ -29,7 +29,7 @@ function Categories() {
 
   const handleClickCategory = (category) => {
     console.log(`Fetching products for category: ${category.name}`);
-    navigate(`/category/${category.name.replace(/\s+/g, "-").toLowerCase()}`, { state: { category } });
+    navigate(`/category/${encodeURIComponent(category.name)}`, { state: { category } });
     dispatch(fetchProductsByQuery(category.categoryId));
   };
 

@@ -213,10 +213,9 @@
   display: flex;
 }
 
-.cart-header h2 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
+.cart-header span {
+  display: flex;
+  align-items: center;
 }
 
 @media (max-width: 900px) {

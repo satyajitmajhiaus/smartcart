@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using SC_Repository.DbContext;
+using SC_Repository.Entities;
 using SC_Repository.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,12 +15,37 @@ namespace SC_Repository.Implementations
         {
             _context = context;
         }
+        public async Task<IEnumerable<Product>> GetPopolarProductsAsync()
+        {
+            var query = "select * from Products where PopularityScore >= 90";
+            using var connection = _context.CreateConnection();
+            return await connection.QueryAsync<Product>(query);
+        }
+
+        public async Task<IEnumerable<AutoSuggestions>> GetAutoSuggestedProductsAsync(string q)
+        {
+            var query = @"select DISTINCT Name from
+	                        (SELECT DISTINCT Name FROM Products 
+	                            UNION SELECT DISTINCT Name FROM Categories
+	                        ) S 
+                            where S.Name like '%" + q + "%';";
+            using var connection = _context.CreateConnection();
+            return await connection.QueryAsync<AutoSuggestions>(query);
+        }
+
+
         public async Task<IEnumerable<Product>> SearchProductsAsync(string query)
         {
-            var sqlQuery = "SELECT * FROM Products where SearchVector like '%"+ query +"%'";
+            //var sqlQuery = "SELECT * FROM Products P inner join Categories C on P.CategoryId = C.CategoryId where SearchVector like '%" + query + "%' or C.Name like '%" + query + "%' ";
+            var sqlQuery = @"SELECT * FROM Products P inner join Categories C on P.CategoryId = C.CategoryId 
+		                    where SearchVector like '%" + query + "%' or C.Name like '%" + query + "%' " +
+                            "or p.CategoryId in (select C.CategoryId from Categories C inner join Categories P on C.ParentCategoryId = P.CategoryId " +
+                            "where P.Name like '%" + query + "%')";
             using var connection = _context.CreateConnection();
             return await connection.QueryAsync<Product>(sqlQuery);
         }
+
+
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
@@ -27,12 +53,7 @@ namespace SC_Repository.Implementations
             using var connection = _context.CreateConnection();
             return await connection.QueryAsync<Product>(query);
         }
-        public async Task<IEnumerable<Product>> GetPopolarProductsAsync()
-        {
-            var query = "select * from Products where PopularityScore >= 90";
-            using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<Product>(query);
-        }
+
         public async Task<IEnumerable<Product>> GetProductsByCategoryIDAsync(int categoryId)
         {
             var query = "select * from Products where  CategoryId = " + categoryId + "or CategoryId in (select CategoryId from  Categories where ParentCategoryId = " + categoryId + ")";

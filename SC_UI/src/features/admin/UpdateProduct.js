@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BsFillEyeFill } from "react-icons/bs";
+import { useSelector } from "react-redux";
 import "./admin.css";
 
 const UpdateProduct = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const categories = useSelector((state) => state.categories.items);
   const product =
     location.state && location.state.product ? location.state.product : null;
 
@@ -87,8 +89,14 @@ const UpdateProduct = () => {
       }
 
       const data = await res.json();
-      setMessage("Product updated successfully");
-      setTimeout(() => navigate(`/product/${form.productId}`), 800);
+      // Show success popup and navigate
+      if (data && data.productId) {
+        alert(`Product "${form.name}" updated successfully!`);
+        navigate(`/product/${data.productId}`);
+      } else {
+        alert(`Product "${form.name}" updated successfully!`);
+        navigate(`/product/${form.productId}`);
+      }
     } catch (err) {
       setMessage(`Error: ${err.message}`);
     } finally {
@@ -166,14 +174,15 @@ const UpdateProduct = () => {
           </div>
 
           <div className="form-row">
-            <label>Category Id</label>
-            <input
-              name="categoryId"
-              type="number"
-              value={form.categoryId}
-              onChange={handleChange}
-              required
-            />
+            <label>Category</label>
+            <select name="categoryId" value={form.categoryId} onChange={handleChange} required>
+              <option value="">-- Select Category --</option>
+              {categories.map((c) => (
+                <option key={c.categoryId} value={c.categoryId}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="form-row">

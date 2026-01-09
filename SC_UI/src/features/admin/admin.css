@@ -97,3 +97,21 @@
 @media (max-width: 768px) {
   .product-form { grid-template-columns: 1fr; }
 }
+
+.filter-section {
+  margin-bottom: 12px;
+}
+
+.filter-section label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.filter-section select,
+.filter-section input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}

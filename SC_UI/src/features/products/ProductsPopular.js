@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {  
   fetchPopularProducts,
@@ -8,6 +8,7 @@ import Product from "./Product";
 import { Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
+import LoadingSpinner from "../../utilities/LoadingSpinner";
 import "./ProductsPopular.css";
 
 export default function ProductsPopular() {
@@ -19,40 +20,50 @@ export default function ProductsPopular() {
   const popularProducts = useSelector((state) => state.products.popularProducts);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
+  const dispatchAction = useCallback(() => {
     dispatch(fetchPopularProducts());
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatchAction();
+  }, [dispatchAction]);
 
   return (
     <div>
       <div>
-        <div className="product-header">
-          <h2>Popular Products</h2>
-          {isLoggedIn && userType === "admin" && (
-            <div
-              className="add-product"
-              onClick={() => navigate("/addproduct")}
-            >
-              <FaPlus />
-              <span className="add-product-text">Add Product</span>
-            </div>
-          )}
-        </div>
-
-        {popularProducts.length === 0 ? (
-          <div className="empty-cart">
-            <p>No products found.</p>
-          </div>
+        {loading ? (
+          <LoadingSpinner />
         ) : (
-          <div className="products-grid">
-            <Row className="g-4">
-              {popularProducts.map((product, index) => (
-                <Col key={index} xs={12} sm={6} md={3} lg={2}>
-                  <Product product={product} />
-                </Col>
-              ))}
-            </Row>
-          </div>
+          <>
+            <div className="product-header">
+              <h2>Popular Products</h2>
+              {isLoggedIn && userType === "admin" && (
+                <div
+                  className="add-product"
+                  onClick={() => navigate("/addproduct")}
+                >
+                  <FaPlus />
+                  <span className="add-product-text">Add Product</span>
+                </div>
+              )}
+            </div>
+
+            {popularProducts.length === 0 ? (
+              <div className="empty-cart">
+                <p>No products found.</p>
+              </div>
+            ) : (
+              <div className="products-grid">
+                <Row className="g-4">
+                  {popularProducts.map((product, index) => (
+                    <Col key={index} xs={12} sm={6} md={3} lg={2}>
+                      <Product product={product} />
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

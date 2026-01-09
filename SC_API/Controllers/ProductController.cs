@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using SC_Repository.Entities;
 using SC_Repository.Interfaces;
 using StackExchange.Redis;
 using System.Text.Json;
@@ -36,6 +37,27 @@ namespace SC_API.Controllers
 
             //Query SQL if not availabe in Redis
             var results = await _productRepository.SearchProductsAsync(query);
+
+            //Store results in Redis (with TTL)
+            await _redisDb.StringSetAsync(cacheKey, JsonSerializer.Serialize(results), TimeSpan.FromMinutes(60));
+
+            return results;
+        }
+
+        [HttpGet("GetAutoSuggestedProducts")]
+        public async Task<IEnumerable<AutoSuggestions>> GetAutoSuggestedProducts(string query)
+        {
+            string cacheKey = $"autosuggest:{query.ToLower()}";
+
+            //Check Redis cache
+            var cachedResults = await _redisDb.StringGetAsync(cacheKey);
+            if (cachedResults.HasValue)
+            {
+                return JsonSerializer.Deserialize<IEnumerable<AutoSuggestions>>(cachedResults);
+            }
+
+            //Query SQL if not availabe in Redis
+            var results = await _productRepository.GetAutoSuggestedProductsAsync(query);
 
             //Store results in Redis (with TTL)
             await _redisDb.StringSetAsync(cacheKey, JsonSerializer.Serialize(results), TimeSpan.FromMinutes(60));

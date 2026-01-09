@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { setFilters } from './productsSlice';
-import './product.css';
+import React, { useEffect, useMemo, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setFilters } from "./productsSlice";
+import "./product.css";
 
 export default function ProductFilters() {
   const dispatch = useDispatch();
@@ -9,29 +9,46 @@ export default function ProductFilters() {
   const filters = useSelector((state) => state.products.filters);
   const categories = useSelector((state) => state.categories.items);
 
-  const categoriesFromProducts = useMemo(() => {
-    const s = new Set();
-    if (!products) return [];
-    products.forEach((p) => {
-      if (p.category) s.add(p.category);
-    });
-    return Array.from(s);
+  console.log("products in ProductFilters: ", products);
+  useEffect(() => {
+    if (categories) {
+      const productCategoryIds = products.map((p) => p.categoryId);
+      const uniqueCategoryIds = [...new Set(productCategoryIds)];
+      const filtered = categories.filter((c) =>
+        uniqueCategoryIds.includes(c.categoryId)
+      );
+      setCategoriesFiltered(filtered);
+      //console.log("Filtered categories based on products: ", filtered);
+    } else {
+      setCategoriesFiltered([]);
+    }
   }, [products]);
-console.log("Categories from products: ", categoriesFromProducts);
+
+   useEffect(() => {
+    clearFilters();
+  }, [products]);
 
   const tags = useMemo(() => {
     const s = new Set();
     if (!products) return [];
     products.forEach((p) => {
       if (!p.tags) return;
-      const tagArray = Array.isArray(p.tags) ? p.tags : p.tags.split(',').map((t) => t.trim());
-      tagArray.forEach((t) => s.add(typeof t === 'string' ? t.trim() : t));
+      const tagArray = Array.isArray(p.tags)
+        ? p.tags
+        : p.tags.split(",").map((t) => t.trim());
+      tagArray.forEach((t) => s.add(typeof t === "string" ? t.trim() : t));
     });
     return Array.from(s);
   }, [products]);
 
-  const [minPrice, setMinPrice] = useState(filters.priceRange[0] === 0 ? '' : filters.priceRange[0]);
-  const [maxPrice, setMaxPrice] = useState(filters.priceRange[1] === Infinity ? '' : filters.priceRange[1]);
+  const [minPrice, setMinPrice] = useState(
+    filters.priceRange[0] === 0 ? "" : filters.priceRange[0]
+  );
+  const [maxPrice, setMaxPrice] = useState(
+    filters.priceRange[1] === Infinity ? "" : filters.priceRange[1]
+  );
+  const [categoriesFiltered, setCategoriesFiltered] = useState([]);
+  
 
   const toggleTag = (tag) => {
     const nextTags = filters.tags.includes(tag)
@@ -45,15 +62,23 @@ console.log("Categories from products: ", categoriesFromProducts);
   };
 
   const applyPrice = () => {
-    const min = minPrice === '' ? 0 : Number(minPrice);
-    const max = maxPrice === '' ? Infinity : Number(maxPrice);
+    const min = minPrice === "" ? 0 : Number(minPrice);
+    const max = maxPrice === "" ? Infinity : Number(maxPrice);
     dispatch(setFilters({ priceRange: [min, max] }));
   };
 
   const clearFilters = () => {
-    dispatch(setFilters({ search: '', category: '', priceRange: [0, Infinity], tags: [], inStockOnly: false }));
-    setMinPrice('');
-    setMaxPrice('');
+    dispatch(
+      setFilters({
+        search: "",
+        category: "",
+        priceRange: [0, Infinity],
+        tags: [],
+        inStockOnly: false,
+      })
+    );
+    setMinPrice("");
+    setMaxPrice("");
   };
 
   const toggleInStock = () => {
@@ -67,14 +92,15 @@ console.log("Categories from products: ", categoriesFromProducts);
       <div className="filter-section">
         <label>Category</label>
         <select value={filters.category} onChange={changeCategory}>
-          <option key="all" value="">All</option>
+          <option key="all" value="">
+            All
+          </option>
           {
-            // Prefer categories derived from the current products (search results)
-            // otherwise fall back to the full categories list from state.
-            (categoriesFromProducts.length ? categoriesFromProducts : (categories || []).map(c => c.name || c))
-              .map((cName) => (
-                <option key={cName} value={cName}>{cName}</option>
-              ))
+              (categoriesFiltered.map((c) => (
+              <option key={c.categoryId} value={c.categoryId}>
+                {c.name}
+              </option>
+            )))
           }
         </select>
       </div>
@@ -82,10 +108,22 @@ console.log("Categories from products: ", categoriesFromProducts);
       <div className="filter-section">
         <label>Price</label>
         <div className="price-inputs">
-          <input type="number" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} />
-          <input type="number" placeholder="Max" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
+          <input
+            type="number"
+            placeholder="Min"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Max"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+          />
         </div>
-        <button className="apply-btn" onClick={applyPrice}>Apply</button>
+        <button className="apply-btn" onClick={applyPrice}>
+          Apply
+        </button>
       </div>
 
       <div className="filter-section">
@@ -93,7 +131,12 @@ console.log("Categories from products: ", categoriesFromProducts);
         <div className="tags-list">
           {tags.map((t) => (
             <label key={t} className="tag-item">
-              <input type="checkbox" checked={filters.tags.includes(t)} onChange={() => toggleTag(t)} /> {t}
+              <input
+                type="checkbox"
+                checked={filters.tags.includes(t)}
+                onChange={() => toggleTag(t)}
+              />{" "}
+              {t}
             </label>
           ))}
         </div>
@@ -101,12 +144,19 @@ console.log("Categories from products: ", categoriesFromProducts);
 
       <div className="filter-section">
         <label>
-          <input type="checkbox" checked={filters.inStockOnly} onChange={toggleInStock} /> In stock only
+          <input
+            type="checkbox"
+            checked={filters.inStockOnly}
+            onChange={toggleInStock}
+          />{" "}
+          In stock only
         </label>
       </div>
 
       <div className="filter-actions">
-        <button className="clear-btn" onClick={clearFilters}>Clear</button>
+        <button className="clear-btn" onClick={clearFilters}>
+          Clear
+        </button>
       </div>
     </aside>
   );
