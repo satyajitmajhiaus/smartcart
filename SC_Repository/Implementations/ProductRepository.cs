@@ -2,6 +2,7 @@
 using SC_Repository.DbContext;
 using SC_Repository.Entities;
 using SC_Repository.Interfaces;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -39,13 +40,28 @@ namespace SC_Repository.Implementations
             //var sqlQuery = "SELECT * FROM Products P inner join Categories C on P.CategoryId = C.CategoryId where SearchVector like '%" + query + "%' or C.Name like '%" + query + "%' ";
             var sqlQuery = @"SELECT * FROM Products P inner join Categories C on P.CategoryId = C.CategoryId 
 		                    where SearchVector like '%" + query + "%' or C.Name like '%" + query + "%' " +
-                            "or p.CategoryId in (select C.CategoryId from Categories C inner join Categories P on C.ParentCategoryId = P.CategoryId " +
-                            "where P.Name like '%" + query + "%')";
+                            "or p.CategoryId in " +
+                                "(select C.CategoryId from Categories C " +
+                                    "inner join Categories P " +
+                                    "on C.ParentCategoryId = P.CategoryId " +
+                                    "where P.Name like '%" + query + "%')";
             using var connection = _context.CreateConnection();
             return await connection.QueryAsync<Product>(sqlQuery);
         }
 
-
+        public async Task<IEnumerable<Product>> GetRelatedProductsAsync(int productId)
+        {
+            var sqlQuery = @"SELECT DISTINCT P.*
+                            FROM Products P
+                                JOIN STRING_SPLIT(
+                                (SELECT Tags FROM Products WHERE ProductId = 1), ','
+                                ) T
+                                ON P.Tags LIKE '%' + T.value + '%'
+                            WHERE P.CategoryId = (SELECT CategoryId FROM Products WHERE ProductId = 1)
+                              AND P.ProductId <> 1;";
+            using var connection = _context.CreateConnection();
+            return await connection.QueryAsync<Product>(sqlQuery);
+        }
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {

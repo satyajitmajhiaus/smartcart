@@ -4,17 +4,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { addItem } from "../cart/cartSlice";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { FaArrowLeft, FaShoppingCart, FaPlus } from "react-icons/fa";
+//import RelatedProducts from "./relatedProducts/RelatedProducts";
+import RelatedProducts from "./RelatedProducts/RelatedProducts";
 import "./productDetails.css";
 
 export default function ProductDetails() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products.items);
+  const popularProducts = useSelector(
+    (state) => state.products.popularProducts
+  );
+  const products = useSelector((state) => state.products.pop);
   const cartItems = useSelector((state) => state.cart.items);
   const { isLoggedIn, userType } = useSelector((state) => state.user);
 
-  const product = products.find((p) => p.productId === parseInt(productId));
+  let product = popularProducts.find((p) => p.productId === parseInt(productId));
+  if (!product) {
+    product = products.find((p) => p.productId === parseInt(productId));
+  }
   const [quantity, setQuantity] = useState(1);
 
   if (!product) {
@@ -72,14 +80,14 @@ export default function ProductDetails() {
       <div className="cart-header">
         <h2>Product Details</h2>
         {isLoggedIn && userType === "admin" && (
-                    <div
-                      className="add-product"
-                      onClick={() => navigate('/updateproduct', { state: { product } })}
-                    >
-                      <FaPlus />
-                      <span className="add-product-text">Update Product</span>
-                    </div>
-                  )}
+          <div
+            className="add-product"
+            onClick={() => navigate("/updateproduct", { state: { product } })}
+          >
+            <FaPlus />
+            <span className="add-product-text">Update Product</span>
+          </div>
+        )}
       </div>
 
       {/* <div className="back-button">
@@ -221,6 +229,7 @@ export default function ProductDetails() {
             </div>
           </Col>
         </Row>
+        <Row className="product-details-row"><RelatedProducts productId={product.productId}/></Row>
       </div>
     </>
   );

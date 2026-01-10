@@ -1,9 +1,6 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {  
-  fetchPopularProducts,
-  deleteProduct,
-} from "./productsSlice";
+import { fetchPopularProducts, deleteProduct } from "./productsSlice";
 import Product from "./Product";
 import { Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -17,37 +14,34 @@ export default function ProductsPopular() {
   );
   console.log("All products in ProductsList: ", allproducts);
   const { isLoggedIn, userType } = useSelector((state) => state.user);
-  const popularProducts = useSelector((state) => state.products.popularProducts);
+  const popularProducts = useSelector(
+    (state) => state.products.popularProducts
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const dispatchAction = useCallback(() => {
-    dispatch(fetchPopularProducts());
-  }, [dispatch]);
-
   useEffect(() => {
-    dispatchAction();
-  }, [dispatchAction]);
+    dispatch(fetchPopularProducts());
+  }, []);
 
   return (
     <div>
       <div>
+        <div className="product-header">
+          <h2>Popular Products</h2>
+          {isLoggedIn && userType === "admin" && (
+            <div
+              className="add-product"
+              onClick={() => navigate("/addproduct")}
+            >
+              <FaPlus />
+              <span className="add-product-text">Add Product</span>
+            </div>
+          )}
+        </div>
         {loading ? (
-          <LoadingSpinner />
+          <div className="products-grid"><LoadingSpinner /></div>
         ) : (
           <>
-            <div className="product-header">
-              <h2>Popular Products</h2>
-              {isLoggedIn && userType === "admin" && (
-                <div
-                  className="add-product"
-                  onClick={() => navigate("/addproduct")}
-                >
-                  <FaPlus />
-                  <span className="add-product-text">Add Product</span>
-                </div>
-              )}
-            </div>
-
             {popularProducts.length === 0 ? (
               <div className="empty-cart">
                 <p>No products found.</p>

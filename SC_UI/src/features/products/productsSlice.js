@@ -94,6 +94,7 @@ export const fetchProductsByQuery = createAsyncThunk(
 
 const initialState = {
   popularProducts: [],
+  relatedProducts: [],
   items: [],
   status: "idle",
   loading: false,
@@ -149,6 +150,9 @@ const productsSlice = createSlice({
     setFilters(state, action) {
       state.filters = { ...state.filters, ...action.payload };
     },
+    fetchRelatedProducts(state, action) {
+      state.relatedProducts = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder

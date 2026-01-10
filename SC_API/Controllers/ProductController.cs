@@ -44,6 +44,27 @@ namespace SC_API.Controllers
             return results;
         }
 
+        [HttpGet("GetRelatedProducts")]
+        public async Task<IEnumerable<Product>> GetRelatedProducts(int productId)
+        {
+            string cacheKey = $"relatedproducts:{productId}";
+
+            //Check Redis cache
+            var cachedResults = await _redisDb.StringGetAsync(cacheKey);
+            if (cachedResults.HasValue)
+            {
+                return JsonSerializer.Deserialize<IEnumerable<Product>>(cachedResults);
+            }
+
+            //Query SQL if not availabe in Redis
+            var results = await _productRepository.GetRelatedProductsAsync(productId);
+
+            //Store results in Redis (with TTL)
+            await _redisDb.StringSetAsync(cacheKey, JsonSerializer.Serialize(results), TimeSpan.FromMinutes(60));
+
+            return results;
+        }
+
         [HttpGet("GetAutoSuggestedProducts")]
         public async Task<IEnumerable<AutoSuggestions>> GetAutoSuggestedProducts(string query)
         {

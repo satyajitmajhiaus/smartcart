@@ -39,7 +39,7 @@ export default function ProductsSearch() {
       <ProductFilters />
       <div>
         {loading ? (
-          <LoadingSpinner />
+          <div className="cart-header"><LoadingSpinner /></div>
         ) : (
           <>
             <div className="cart-header">

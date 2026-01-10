@@ -3,6 +3,7 @@ import productsReducer from '../features/products/productsSlice';
 import cartReducer from '../features/cart/cartSlice';
 import categoriesReducer from '../features/categories/categoriesSlice';
 import userReducer from '../features/user/userSlice';
+import relatedProductsReducer from '../features/products/RelatedProducts/relatedProductsSlice';
 
 const loadState = () => {
   try {
@@ -39,6 +40,7 @@ export const store = configureStore({
     cart: cartReducer,
     categories: categoriesReducer,
     user: userReducer,
+    relatedProducts: relatedProductsReducer,
   },
   preloadedState: loadState(),
 });
