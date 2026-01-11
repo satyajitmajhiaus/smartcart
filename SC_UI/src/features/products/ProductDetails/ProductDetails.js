@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { addItem } from "../../cart/cartSlice";
+import { addCartItem } from "../../cart/cartSlice";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { FaArrowLeft, FaShoppingCart, FaPlus } from "react-icons/fa";
 //import RelatedProducts from "./relatedProducts/RelatedProducts";
@@ -46,7 +46,7 @@ export default function ProductDetails() {
   const handleAddToCart = () => {
     if (quantity > 0 && canAddMore) {
       for (let i = 0; i < quantity; i++) {
-        dispatch(addItem(product));
+        dispatch(addCartItem(product));
       }
       setQuantity(1);
     }
@@ -60,21 +60,12 @@ export default function ProductDetails() {
     }
   };
 
-  const handleBuyNow = () => {
-    if (quantity > 0 && canAddMore) {
-      for (let i = 0; i < quantity; i++) {
-        dispatch(addItem(product));
-      }
-      navigate("/cart");
-    }
-  };
-
   const totalPrice = (product.price * quantity).toFixed(2);
   const tagsArray = Array.isArray(product.tags)
     ? product.tags
     : product.tags
     ? product.tags.split(",").map((t) => t.trim())
-    : [];
+    : []; 
 
   return (
     <>
@@ -204,13 +195,7 @@ export default function ProductDetails() {
                 >
                   <FaShoppingCart /> Add to Cart
                 </Button>
-                <Button
-                  className="buy-now-btn"
-                  onClick={handleBuyNow}
-                  disabled={!canAddMore || quantity === 0}
-                >
-                  Buy Now
-                </Button>
+             
               </div>
 
               {!canAddMore && product.stock === 0 && (

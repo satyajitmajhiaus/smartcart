@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
-import { addItem, removeItem } from "../cart/cartSlice";
+import { addCartItem, removeCartItem } from "../cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RiDeleteBinLine } from "react-icons/ri";
@@ -27,20 +27,20 @@ function Product({ product }) {
   const handleAddToCart = (e) => {
     e.stopPropagation();
     if (!canAddMore) return;
-    dispatch(addItem(product));
+    dispatch(addCartItem(product));
   };
 
   const handleIncrement = (e) => {
     e.stopPropagation();
     if (canAddMore) {
-      dispatch(addItem(product));
+      dispatch(addCartItem(product));
     }
   };
 
   const handleDecrement = (e) => {
     e.stopPropagation();
     if (quantityAddedToCart > 0) {
-      dispatch(removeItem(product.productId));
+      dispatch(removeCartItem({productId: product.productId, quantity: 1}));
     }
   };
 
