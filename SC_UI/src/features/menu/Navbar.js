@@ -11,6 +11,7 @@ import { logout } from "../user/userSlice";
 import "../user/user.css";
 import "./Navbar.css";
 import { FaUser } from "react-icons/fa";
+import { TbHexagonLetterSFilled } from "react-icons/tb";
 
 
 function Menu() {
@@ -44,7 +45,7 @@ function Menu() {
         fixed="top"
       >
         <Container>
-          <Navbar.Brand href="/">Smart Cart</Navbar.Brand>
+          <Navbar.Brand href="/"><TbHexagonLetterSFilled className="nav-logo-icon"/>mart Cart</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <SearchBar />

@@ -9,13 +9,10 @@ import LoadingSpinner from "../../utilities/LoadingSpinner";
 import "./ProductsPopular.css";
 
 export default function ProductsPopular() {
-  const { allproducts, loading, error } = useSelector(
-    (state) => state.products
-  );
-  console.log("All products in ProductsList: ", allproducts);
+  
   const { isLoggedIn, userType } = useSelector((state) => state.user);
-  const popularProducts = useSelector(
-    (state) => state.products.popularProducts
+  const { popularProducts, loading } = useSelector(
+    (state) => state.products
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();

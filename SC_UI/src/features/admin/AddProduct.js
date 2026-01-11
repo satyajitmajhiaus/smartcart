@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 const AddProduct = () => {
   const navigate = useNavigate();
   const categories = useSelector((state) => state.categories.items);
+  const { isLoggedIn, userType } = useSelector((state) => state.user);
 
   const [form, setForm] = useState({
     name: "",
@@ -57,17 +58,18 @@ const AddProduct = () => {
 
       if (!res.ok) {
         const text = await res.text();
-        throw new Error(text || "Failed to add product");
+        alert(`Error while adding the product "${form.name}"!`);        
+        console.log(text || "Failed to add product");
       }
 
       const data = await res.json();
+      console.log("Product added, ", data);
       // Show success popup and navigate
-      if (data && data.productId) {
+      if (data) {
         alert(`Product "${form.name}" added successfully!`);
-        navigate(`/product/${data.productId}`);
+        navigate(`/product/${data}`);
       } else {
-        setMessage("Product added successfully");
-        setTimeout(() => navigate("/"), 800);
+        alert(`Error while adding the product "${form.name}"!`);        
       }
     } catch (err) {
       setMessage(`Error: ${err.message}`);
@@ -83,7 +85,8 @@ const AddProduct = () => {
       </div>
 
       <div className="product-card">
-        <form className="product-form" onSubmit={handleSubmit}>
+        {isLoggedIn && userType.toLowerCase() === "admin" ? 
+        (<form className="product-form" onSubmit={handleSubmit}>
           <div className="form-row">
             <label>Name</label>
             <input
@@ -181,7 +184,12 @@ const AddProduct = () => {
               Clear
             </button>
           </div>
-        </form>
+        </form>)
+        : (
+          <div className="access-denied">
+            <h5>Access Denied!</h5>
+          </div>
+        )}
       </div>
     </>
   );

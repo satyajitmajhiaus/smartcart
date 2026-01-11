@@ -4,6 +4,7 @@ import cartReducer from '../features/cart/cartSlice';
 import categoriesReducer from '../features/categories/categoriesSlice';
 import userReducer from '../features/user/userSlice';
 import relatedProductsReducer from '../features/products/RelatedProducts/relatedProductsSlice';
+import productDetailsReducer from '../features/products/ProductDetails/productDetailsSlice';
 
 const loadState = () => {
   try {
@@ -16,7 +17,7 @@ const loadState = () => {
     if (cart) preloaded.cart = cart;
     return Object.keys(preloaded).length ? preloaded : undefined;
   } catch (err) {
-    console.warn('Failed to load persisted state:', err);
+    console.warn('Failed to load local state:', err);
     return undefined;
   }
 };
@@ -41,6 +42,7 @@ export const store = configureStore({
     categories: categoriesReducer,
     user: userReducer,
     relatedProducts: relatedProductsReducer,
+    productDetails: productDetailsReducer,
   },
   preloadedState: loadState(),
 });

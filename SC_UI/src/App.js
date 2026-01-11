@@ -1,5 +1,5 @@
 import ProductsSearch from "./features/products/ProductsSearch";
-import ProductDetails from "./features/products/ProductDetails";
+import ProductDetails from "./features/products/ProductDetails/ProductDetails";
 import Cart from "./features/cart/Cart";
 import Menu from "./features/menu/Navbar";
 import { Container } from "react-bootstrap";

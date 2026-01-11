@@ -1,8 +1,10 @@
+import { PiSpinnerGap } from "react-icons/pi";
+import "./loadingSpinner.css";
+
 export default function LoadingSpinner() {
   return (
     <div className="loading-spinner-container">
-      <div className="spinner"></div>
-      <p>Loading products...</p>
+      <PiSpinnerGap className="spinner" size={40} />
     </div>
   );
 }

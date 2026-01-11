@@ -7,6 +7,8 @@ import "./admin.css";
 const UpdateProduct = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { isLoggedIn, userType } = useSelector((state) => state.user);
+
   const categories = useSelector((state) => state.categories.items);
   const product =
     location.state && location.state.product ? location.state.product : null;
@@ -123,13 +125,18 @@ const UpdateProduct = () => {
             )} */}
       <div className="product-header">
         <h2>Update Product</h2>
-        <div className="add-product" onClick={() => navigate(`/product/${form.productId}`)}>
+        <div
+          className="add-product"
+          onClick={() => navigate(`/product/${form.productId}`)}
+        >
           <BsFillEyeFill />
           <span className="add-product-text">View Product</span>
         </div>
       </div>
 
       <div className="product-card">
+        {isLoggedIn && userType.toLowerCase() === "admin" ? 
+        (
         <form className="product-form" onSubmit={handleSubmit}>
           <div className="form-row" hidden>
             <label>Product Id</label>
@@ -175,7 +182,12 @@ const UpdateProduct = () => {
 
           <div className="form-row">
             <label>Category</label>
-            <select name="categoryId" value={form.categoryId} onChange={handleChange} required>
+            <select
+              name="categoryId"
+              value={form.categoryId}
+              onChange={handleChange}
+              required
+            >
               <option value="">-- Select Category --</option>
               {categories.map((c) => (
                 <option key={c.categoryId} value={c.categoryId}>
@@ -228,7 +240,12 @@ const UpdateProduct = () => {
               Cancel
             </button>
           </div>
-        </form>
+        </form>)
+        : (
+          <div className="access-denied">
+            <h5>Access Denied!</h5>
+          </div>
+        )}
       </div>
     </>
   );

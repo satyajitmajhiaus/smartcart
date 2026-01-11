@@ -1,7 +1,7 @@
 ﻿select *,SearchVector from Products where PopularityScore >= 90 --Name like '%test%' order by CreatedAt desc
 select * from  Categories where name  like '%Computers & Laptops%'  -- ParentCategoryId is null
 select * from Currencies
-SELECT * FROM Products where SearchVector like '%samsung%'
+SELECT * FROM Products order by ProductId desc -- where SearchVector like '%samsung%'
 
 select DISTINCT Suggestion from
 	(SELECT DISTINCT name AS Suggestion FROM Products 

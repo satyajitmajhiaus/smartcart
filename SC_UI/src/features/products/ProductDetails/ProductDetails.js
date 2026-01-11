@@ -1,28 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { addItem } from "../cart/cartSlice";
+import { addItem } from "../../cart/cartSlice";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { FaArrowLeft, FaShoppingCart, FaPlus } from "react-icons/fa";
 //import RelatedProducts from "./relatedProducts/RelatedProducts";
-import RelatedProducts from "./RelatedProducts/RelatedProducts";
+import RelatedProducts from "../RelatedProducts/RelatedProducts";
+import { fetchProductDetails } from "./productDetailsSlice";
 import "./productDetails.css";
 
 export default function ProductDetails() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const popularProducts = useSelector(
-    (state) => state.products.popularProducts
+  const {product, loading, error} = useSelector(
+    (state) => state.productDetails
   );
-  const products = useSelector((state) => state.products.pop);
+
   const cartItems = useSelector((state) => state.cart.items);
   const { isLoggedIn, userType } = useSelector((state) => state.user);
 
-  let product = popularProducts.find((p) => p.productId === parseInt(productId));
-  if (!product) {
-    product = products.find((p) => p.productId === parseInt(productId));
-  }
+  useEffect(() => {    
+    dispatch(fetchProductDetails(productId));
+  }, [dispatch, productId]);
+  
   const [quantity, setQuantity] = useState(1);
 
   if (!product) {
@@ -38,7 +39,7 @@ export default function ProductDetails() {
     );
   }
 
-  const cartItem = cartItems.find((item) => item.pId === product.pId);
+  const cartItem = cartItems.find((item) => item.productId === product.productId);
   const quantityInCart = cartItem ? cartItem.quantity : 0;
   const canAddMore = product.stock > quantityInCart;
 
@@ -221,7 +222,7 @@ export default function ProductDetails() {
               {quantityInCart > 0 && (
                 <div className="already-in-cart-info">
                   <p>
-                    You already have {quantityInCart} item(s) of this product in
+                    You have {quantityInCart} item(s) of this product in
                     your cart
                   </p>
                 </div>

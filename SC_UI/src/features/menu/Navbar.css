@@ -8,6 +8,10 @@
   width: 100%;
 }
 
+.nav-logo-icon{
+  font-size: 1.9rem;
+  color: #ff9933;
+}
 .nav-search{
   width: 100%;
   background: #ffffff;
