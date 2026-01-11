@@ -1,10 +1,11 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import { API } from "../../../config/apiConfig";
 
 export const fetchRelatedProducts = createAsyncThunk(
   "products/fetchRelatedProducts",
   async (productId, { rejectWithValue }) => {   
     try {
-      const response = await fetch("https://localhost:7150/api/Product/GetRelatedProducts?productId=" + productId);
+      const response = await fetch(API.getRelatedProducts(productId));
       if (!response.ok) {
         return rejectWithValue("Failed to fetch related products");
       }

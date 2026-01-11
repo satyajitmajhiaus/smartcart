@@ -2,14 +2,13 @@ import {
   createSlice,
   createAsyncThunk
 } from "@reduxjs/toolkit";
+import { API } from "../../../config/apiConfig";
 
 export const fetchProductDetails = createAsyncThunk(
   "productDetails/fetchProductDetails",
   async (productId, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `https://localhost:7150/api/Product/GetProductById?pId=${productId}`
-      );
+      const response = await fetch(API.getProductById(productId));
       if (!response.ok) {
         return rejectWithValue("Failed to fetch popular products");
       }

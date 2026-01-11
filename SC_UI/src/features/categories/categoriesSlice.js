@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API } from "../../config/apiConfig";
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("https://localhost:7150/api/Category/all");
+      const response = await fetch(`${API.base}/api/Category/all`);
       if (!response.ok) {
         throw new Error("Failed to fetch categories");
       }

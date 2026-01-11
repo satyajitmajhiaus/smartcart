@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BsFillEyeFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import { API } from "../../config/apiConfig";
 import "./admin.css";
 
 const UpdateProduct = () => {
@@ -76,14 +77,11 @@ const UpdateProduct = () => {
     };
 
     try {
-      const res = await fetch(
-        "https://localhost:7150/api/Product/UpdateProduct",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(API.updateProduct(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
       if (!res.ok) {
         const text = await res.text();

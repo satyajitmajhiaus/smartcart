@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./admin.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { API } from "../../config/apiConfig";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ const AddProduct = () => {
     };
 
     try {
-      const res = await fetch("https://localhost:7150/api/Product/AddProduct", {
+      const res = await fetch(API.addProduct(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { VscEdit } from "react-icons/vsc";
 import { deleteProduct } from "./productsSlice";
+import { API } from "../../config/apiConfig";
 
 import "./product.css";
 
@@ -62,7 +63,7 @@ function Product({ product }) {
     if (!targetProduct) return;
     const id = targetProduct.productId ?? targetProduct.id ?? targetProduct.pId;
     try {
-      const resp = await fetch(`https://localhost:7150/api/Product?id=${id}`, {
+      const resp = await fetch(API.deleteProduct(id), {
         method: "DELETE",
       });
       if (!resp.ok) {

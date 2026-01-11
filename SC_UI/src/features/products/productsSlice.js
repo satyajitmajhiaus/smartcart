@@ -3,14 +3,13 @@ import {
   createAsyncThunk,
   createSelector,
 } from "@reduxjs/toolkit";
+import { API } from "../../config/apiConfig";
 
 export const fetchPopularProducts = createAsyncThunk(
   "products/fetchPopularProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `https://localhost:7150/api/Product/GetPopolarProducts`
-      );
+      const response = await fetch(API.getPopular());
       if (!response.ok) {
         return rejectWithValue("Failed to fetch popular products");
       }
@@ -64,9 +63,7 @@ export const fetchProductsByQuery = createAsyncThunk(
       
       if (isSearchQuery && query) {
         console.log("Fetching products by search query - ", query);
-        const response = await fetch(
-          `https://localhost:7150/api/Product/SearchProducts?query=${encodeURIComponent(query)}`
-        );
+        const response = await fetch(API.searchProducts(encodeURIComponent(query)));
         if (!response.ok) {
           return rejectWithValue("Failed to fetch products");
         }
@@ -76,9 +73,7 @@ export const fetchProductsByQuery = createAsyncThunk(
       } else if (query) {
         // Category query
         console.log("Fetching products by category ID - ", query);
-        const response = await fetch(
-          `https://localhost:7150/api/Product/GetProductsByCategoryID?categoryId=${query}`
-        );
+        const response = await fetch(API.getProductsByCategory(query));
         console.log("Fetching products by category");
         if (!response.ok) {
           return rejectWithValue("Failed to fetch products");

@@ -5,6 +5,7 @@ import { BsSearch } from "react-icons/bs";
 import { fetchProductsByQuery } from "../products/productsSlice";
 import { useNavigate } from "react-router-dom";
 import "../menu/Navbar.css";
+import { API } from "../../config/apiConfig";
 
 export default function SearchBar() {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ export default function SearchBar() {
       abortRef.current = controller;
       try {
         const q = encodeURIComponent(query.trim());
-        const res = await fetch(`https://localhost:7150/api/Product/GetAutoSuggestedProducts?query=${q}`, { signal: controller.signal });
+        const res = await fetch(API.getAutoSuggested(q), { signal: controller.signal });
         if (!res.ok) return setSuggestions([]);
         const data = await res.json();
         // expect data to be an array of suggestions (strings or objects)
