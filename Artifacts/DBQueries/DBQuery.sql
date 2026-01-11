@@ -2,6 +2,18 @@
 select * from  Categories where name  like '%Computers & Laptops%'  -- ParentCategoryId is null
 select * from Currencies
 SELECT * FROM Products order by ProductId desc -- where SearchVector like '%samsung%'
+select * from Users
+
+insert into Users (Username,PasswordHash,Email,Role,CreatedAt) values 
+('Satya',HASHBYTES('SHA2_256', 'smpass@2026'),'Satya@gmail.com','User',GETDATE())
+insert into Users (Username,PasswordHash,Email,Role,CreatedAt) values 
+('Satyajit',HASHBYTES('SHA2_256', 'smpass@2026'),'Satyajit@gmail.com','Admin',GETDATE())
+update Users set PasswordHash = HASHBYTES('SHA2_256', 'sc@2026')
+
+SELECT COUNT(1) FROM Users 
+	WHERE username = 'Satya' AND PasswordHash = HASHBYTES('SHA2_256', 'sc@2026') AND Role = 'user' AND IsActive = 1
+SELECT COUNT(1) FROM Users 
+                          WHERE username = 'Satya' AND PasswordHash = HASHBYTES('SHA2_256', 'sc@2026') AND Role = 'User' AND IsActive = 1
 
 select DISTINCT Suggestion from
 	(SELECT DISTINCT name AS Suggestion FROM Products 

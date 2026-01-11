@@ -71,7 +71,7 @@ export default function ProductDetails() {
     <>
       <div className="cart-header">
         <h2>Product Details</h2>
-        {isLoggedIn && userType === "admin" && (
+        {isLoggedIn && userType.toLowerCase() === "admin" && (
           <div
             className="add-product"
             onClick={() => navigate("/updateproduct", { state: { product } })}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BsFillEyeFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
-import { API } from "../../config/apiConfig";
+import { API } from "../../app/apiConfig";
 import "./admin.css";
 
 const UpdateProduct = () => {

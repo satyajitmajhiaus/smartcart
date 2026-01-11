@@ -48,7 +48,7 @@ export default function ProductsSearch() {
                   Showing {products.length} results for {searchQueryText}
                 </b>
               </span>
-              {isLoggedIn && userType === "admin" && (
+              {isLoggedIn && userType.toLowerCase() === "admin" && (
                 <div
                   className="add-product"
                   onClick={() => navigate("/addproduct")}

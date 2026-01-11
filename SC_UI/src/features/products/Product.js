@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { VscEdit } from "react-icons/vsc";
 import { deleteProduct } from "./productsSlice";
-import { API } from "../../config/apiConfig";
+import { API } from "../../app/apiConfig";
 
 import "./product.css";
 
@@ -19,6 +19,7 @@ function Product({ product }) {
   const [targetProduct, setTargetProduct] = useState(null);
   const cartItems = useSelector((state) => state.cart.items);
   const { isLoggedIn, userType } = useSelector((state) => state.user);
+  console.log("userType:", userType);
   const cartItem = cartItems.find(
     (item) => item.productId === product.productId
   );
@@ -92,7 +93,7 @@ function Product({ product }) {
           src={product.imageUrl}
           className="product-card-image"
         />
-        {isLoggedIn && userType === "admin" && (
+        {isLoggedIn && userType.toLowerCase() === "admin" && (
           <div className="admin-controls">
             <button
               className="product-edit-btn"
@@ -116,9 +117,7 @@ function Product({ product }) {
         className="product-card-body-clickable"
       >
         <Card.Title className="product-card-title">
-          {product.name.length > 22
-            ? `${product.name.substring(0, 22)}...`
-            : product.name}
+          {product.name}
         </Card.Title>
         <div style={{ marginTop: 6 }}>
           {product.stock > 0 ? (

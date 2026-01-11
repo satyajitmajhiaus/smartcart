@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from './userSlice';
+import { API } from '../../app/apiConfig';
 import './user.css';
 
 function Login({ onClose }) {
@@ -10,23 +11,45 @@ function Login({ onClose }) {
   const [error, setError] = useState('');
   const dispatch = useDispatch();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     if (!userName || !password) {
       setError('Please fill all fields');
       return;
     }
 
-    // Dispatch login action with user info
-    dispatch(login({
-      userType,
-      userName,
-      email: `${userName}@smartcart.com`,
-    }));
-
     setError('');
-    onClose();
+
+    try {
+      const role = (userType || 'user').charAt(0).toUpperCase() + (userType || 'user').slice(1);
+      const payload = { username: userName, password, role };
+
+      const res = await fetch(API.login(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        setError(text || `Login failed (${res.status})`);
+        return;
+      }
+
+      const data = await res;
+
+      // const userPayload = {
+      //   userType: data.role ? data.role.toLowerCase() : userType,
+      //   userName: data.username || userName,
+      // };
+
+      dispatch(login(payload));
+
+      onClose();
+    } catch (err) {
+      setError(err.message || 'Login failed');
+    }
   };
 
   return (

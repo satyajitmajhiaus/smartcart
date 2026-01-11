@@ -12,6 +12,7 @@ export const API = {
   getProductById: (pId) => `${BASE}/api/Product/GetProductById?pId=${pId}`,
   getAutoSuggested: (q) => `${BASE}/api/Product/GetAutoSuggestedProducts?query=${q}`,
   getRelatedProducts: (productId) => `${BASE}/api/Product/GetRelatedProducts?productId=${productId}`,
+  login: () => `${BASE}/api/User/login`
 };
 
 export default API;

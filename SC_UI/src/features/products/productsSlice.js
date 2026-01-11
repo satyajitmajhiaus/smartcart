@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   createSelector,
 } from "@reduxjs/toolkit";
-import { API } from "../../config/apiConfig";
+import { API } from "../../app/apiConfig";
 
 export const fetchPopularProducts = createAsyncThunk(
   "products/fetchPopularProducts",
@@ -108,39 +108,18 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     addProduct(state, action) {
-      state.items.push(action.payload);
-      try {
-        if (typeof window !== "undefined" && window.localStorage) {
-          localStorage.setItem("products", JSON.stringify(state.items));
-        }
-      } catch (e) {}
+      state.items.push(action.payload);      
     },
     updateProduct(state, action) {
       const index = state.items.findIndex((p) => p.id === action.payload.id);
       if (index !== -1) {
-        state.items[index] = action.payload;
-        try {
-          if (typeof window !== "undefined" && window.localStorage) {
-            localStorage.setItem("products", JSON.stringify(state.items));
-          }
-        } catch (e) {}
+        state.items[index] = action.payload;        
       }
     },
     deleteProduct(state, action) {
       const idToRemove = action.payload;
-      state.items = state.items.filter((p) => {
-        // handle different possible id field names returned by various sources
-        if (p.id !== undefined) return p.id !== idToRemove;
-        if (p.productId !== undefined) return p.productId !== idToRemove;
-        if (p.pId !== undefined) return p.pId !== idToRemove;
-        // fallback: if product is a primitive id stored directly
-        return p !== idToRemove;
-      });
-      try {
-        if (typeof window !== "undefined" && window.localStorage) {
-          localStorage.setItem("products", JSON.stringify(state.items));
-        }
-      } catch (e) {}
+      state.items = state.items.filter((p) => p.productId !== idToRemove);
+      state.popularProducts = state.popularProducts.filter((p) => p.productId !== idToRemove);
     },
     setFilters(state, action) {
       state.filters = { ...state.filters, ...action.payload };

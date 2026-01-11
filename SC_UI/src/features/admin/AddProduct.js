@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./admin.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { API } from "../../config/apiConfig";
+import { API } from "../../app/apiConfig";
 
 const AddProduct = () => {
   const navigate = useNavigate();

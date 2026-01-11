@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPopularProducts, deleteProduct } from "./productsSlice";
+import { fetchPopularProducts } from "./productsSlice";
 import Product from "./Product";
 import { Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +25,7 @@ export default function ProductsPopular() {
       <div>
         <div className="product-header">
           <h2>Popular Products</h2>
-          {isLoggedIn && userType === "admin" && (
+          {isLoggedIn && userType.toLowerCase() === "admin" && (
             <div
               className="add-product"
               onClick={() => navigate("/addproduct")}

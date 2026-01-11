@@ -11,6 +11,10 @@
 .nav-logo-icon{
   font-size: 1.9rem;
   color: #ff9933;
+  cursor: pointer;
+}
+.nav-logo-icon + span{
+  cursor: pointer;
 }
 .nav-search{
   width: 100%;

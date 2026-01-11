@@ -1,32 +1,36 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoggedIn: false,
   userType: null, // 'admin' or 'user'
   userName: null,
-  email: null,
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     login: (state, action) => {
-      const { userType, userName, email } = action.payload;
+      const { role, username } = action.payload;
       state.isLoggedIn = true;
-      state.userType = userType;
-      state.userName = userName;
-      state.email = email;
+      state.userType = role;
+      state.userName = username;
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userType: role,
+          userName: username,
+        })
+      );
     },
     logout: (state) => {
       state.isLoggedIn = false;
       state.userType = null;
       state.userName = null;
-      state.email = null;
       try {
-        localStorage.removeItem('user');
+        localStorage.removeItem("user");
       } catch (err) {
-        console.warn('Failed to clear persisted user on logout:', err);
+        console.warn("Failed to clear persisted user on logout:", err);
       }
     },
   },

@@ -5,7 +5,7 @@ import { BsSearch } from "react-icons/bs";
 import { fetchProductsByQuery } from "../products/productsSlice";
 import { useNavigate } from "react-router-dom";
 import "../menu/Navbar.css";
-import { API } from "../../config/apiConfig";
+import { API } from "../../app/apiConfig";
 
 export default function SearchBar() {
   const dispatch = useDispatch();

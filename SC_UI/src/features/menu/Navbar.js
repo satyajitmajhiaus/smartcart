@@ -21,7 +21,7 @@ function Menu() {
   const { isLoggedIn, userName, userType } = useSelector((state) => state.user);
 
   const handleCartPageNavigate = () => navigate("/cart");
-
+const handleHomeNavigate = () => navigate("/");
   const handleUserIconClick = () => {
     if (isLoggedIn) {
       // If logged in, show menu options
@@ -45,7 +45,7 @@ function Menu() {
         fixed="top"
       >
         <Container>
-          <Navbar.Brand href="/"><TbHexagonLetterSFilled className="nav-logo-icon"/>mart Cart</Navbar.Brand>
+          <Navbar.Brand  onClick={handleHomeNavigate} ><TbHexagonLetterSFilled className="nav-logo-icon"/><span>mart Cart</span></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <SearchBar />
