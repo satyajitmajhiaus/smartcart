@@ -171,14 +171,14 @@ const productsSlice = createSlice({
       .addCase(fetchPopularProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.popularProducts = action.payload;
-        try {
-          if (typeof window !== "undefined" && window.localStorage) {
-            localStorage.setItem(
-              "popularProducts",
-              JSON.stringify(state.popularProducts)
-            );
-          }
-        } catch (e) {}
+        // try {
+        //   if (typeof window !== "undefined" && window.localStorage) {
+        //     localStorage.setItem(
+        //       "popularProducts",
+        //       JSON.stringify(state.popularProducts)
+        //     );
+        //   }
+        // } catch (e) {}
       })
       .addCase(fetchPopularProducts.rejected, (state, action) => {
         state.loading = false;

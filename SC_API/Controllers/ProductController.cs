@@ -125,15 +125,7 @@ namespace SC_API.Controllers
 
             return actionResult;
         }
-
-
-        [HttpGet("GetAllProducts")]
-        public Task<IEnumerable<Product>> GetAllProducts()
-        {
-            Task<IEnumerable<Product>> actionResult = _productRepository.GetAllAsync();
-            return actionResult;
-        }
-                        
+          
 
         [HttpGet("GetProductById")]
         public Task<Product?> GetProductById(int pId)

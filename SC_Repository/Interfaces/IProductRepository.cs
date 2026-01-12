@@ -9,7 +9,7 @@ namespace SC_Repository.Interfaces
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<Product>> GetAllAsync();
+        
         Task<IEnumerable<Product>> GetPopolarProductsAsync();
         Task<IEnumerable<Product>> SearchProductsAsync(string query);
         Task<IEnumerable<Product>> GetRelatedProductsAsync(int productId);
