@@ -5,6 +5,8 @@ using SC_Repository.Interfaces;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
+string appUrl = builder.Configuration["AppSettings:AppUrl"];
+string redisConnectionString = builder.Configuration["AppSettings:RedisConnectionString"];
 
 // Add services to the container.
 // Add CORS policy
@@ -13,11 +15,11 @@ builder.Services.AddCors(options =>
         options.AddPolicy("AllowReactApp",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+            policy.WithOrigins(appUrl).AllowAnyHeader().AllowAnyMethod();            
         });
     });
 // Add Redis connection
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect("localhost:6379"));
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(redisConnectionString));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
