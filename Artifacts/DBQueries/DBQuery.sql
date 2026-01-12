@@ -4,6 +4,13 @@ select * from Currencies
 SELECT * FROM Products order by ProductId desc -- where SearchVector like '%samsung%'
 select * from Users
 
+--related
+SELECT DISTINCT P.*
+	FROM Products P
+	JOIN STRING_SPLIT(
+	(SELECT Tags FROM Products WHERE ProductId = 23), ',') T
+	ON P.Tags LIKE '%' + T.value + '%' WHERE P.CategoryId = (SELECT CategoryId FROM Products WHERE ProductId = 23) AND P.ProductId <> 23; 
+
 insert into Users (Username,PasswordHash,Email,Role,CreatedAt) values 
 ('Satya',HASHBYTES('SHA2_256', 'smpass@2026'),'Satya@gmail.com','User',GETDATE())
 insert into Users (Username,PasswordHash,Email,Role,CreatedAt) values 

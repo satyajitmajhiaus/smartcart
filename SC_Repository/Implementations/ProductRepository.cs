@@ -54,11 +54,10 @@ namespace SC_Repository.Implementations
             var sqlQuery = @"SELECT DISTINCT P.*
                             FROM Products P
                                 JOIN STRING_SPLIT(
-                                (SELECT Tags FROM Products WHERE ProductId = 1), ','
-                                ) T
-                                ON P.Tags LIKE '%' + T.value + '%'
-                            WHERE P.CategoryId = (SELECT CategoryId FROM Products WHERE ProductId = 1)
-                              AND P.ProductId <> 1;";
+                                (SELECT Tags FROM Products WHERE ProductId = " + productId + "), ',') T "+
+                                "ON P.Tags LIKE '%' + T.value + '%' " +
+                            "WHERE P.CategoryId = (SELECT CategoryId FROM Products WHERE ProductId = " + productId + ") "+
+                              "AND P.ProductId <> " + productId + "; ";
             using var connection = _context.CreateConnection();
             return await connection.QueryAsync<Product>(sqlQuery);
         }
