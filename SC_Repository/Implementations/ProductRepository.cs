@@ -2,6 +2,7 @@
 using SC_Repository.DbContext;
 using SC_Repository.Entities;
 using SC_Repository.Interfaces;
+using SC_Repository.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,6 +23,30 @@ namespace SC_Repository.Implementations
             using var connection = _context.CreateConnection();
             return await connection.QueryAsync<Product>(query);
         }
+
+        public async Task<PaginatedResult<Product>> GetPopolarProductsAsync(int page, int pageSize)
+        {
+            var query = "SELECT * FROM Products WHERE PopularityScore >= 80 ORDER BY PopularityScore DESC OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;";
+            var countQuery = "SELECT COUNT(ProductId) FROM Products WHERE PopularityScore >= 80;";
+
+            using var connection = _context.CreateConnection();
+
+            var items = await connection.QueryAsync<Product>(query, new { Offset = (page - 1) * pageSize, PageSize = pageSize });
+            var totalItems = await connection.ExecuteScalarAsync<int>(countQuery);
+
+            return new PaginatedResult<Product>
+            {
+                Items = items,
+                Pagination = new PaginationDetails
+                {
+                    CurrentPage = page,
+                    TotalPages = (int)System.Math.Ceiling((double)totalItems / pageSize),
+                    PageSize = pageSize,
+                    TotalItems = totalItems
+                }
+            };
+        }
+
 
         public async Task<IEnumerable<AutoSuggestions>> GetAutoSuggestedProductsAsync(string q)
         {

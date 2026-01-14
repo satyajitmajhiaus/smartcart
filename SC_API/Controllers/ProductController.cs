@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using SC_Repository.Entities;
 using SC_Repository.Interfaces;
+using SC_Repository.Models;
 using StackExchange.Redis;
 using System.Text.Json;
 
@@ -22,6 +23,26 @@ namespace SC_API.Controllers
             _redisDb = redis.GetDatabase();            
             _productRepository = productRepository;
         }
+
+        [HttpGet("GetPopolarProducts")]
+        public async Task<PaginatedResult<Product>> GetPopolarProducts(int page, int pageSize)
+        {
+            string cacheKey = $"popularproducts:{page}pagesize{pageSize}";
+
+            //Check Redis cache
+            var cachedResults = await _redisDb.StringGetAsync(cacheKey);
+            if (cachedResults.HasValue)
+            {
+                return JsonSerializer.Deserialize<PaginatedResult<Product>>(cachedResults);
+            }
+
+            PaginatedResult<Product> actionResult = await _productRepository.GetPopolarProductsAsync(page,pageSize);
+
+            //Store results in Redis (with TTL)
+            await _redisDb.StringSetAsync(cacheKey, JsonSerializer.Serialize(actionResult), TimeSpan.FromMinutes(60));
+
+            return actionResult;
+        }              
 
         [HttpGet("SearchProducts")]
         public async Task<IEnumerable<Product>> SearchProducts(string query)
@@ -106,7 +127,7 @@ namespace SC_API.Controllers
             return actionResult;
         }
 
-        [HttpGet("GetPopolarProducts")]
+        [HttpGet("GetPopolarAllProducts")]
         public async Task<IEnumerable<Product>> GetPopolarProducts()
         {
             string cacheKey = $"popularproducts";

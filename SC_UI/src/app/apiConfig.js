@@ -3,7 +3,7 @@ const BASE = rawBase.replace(/\/+$/, "");
 
 export const API = {
   base: BASE,
-  getPopular: () => `${BASE}/api/Product/GetPopolarProducts`,
+  getPopular: (page = 1, pageSize = 24) => `${BASE}/api/Product/GetPopolarProducts?page=${page}&pageSize=${pageSize}`,
   searchProducts: (q) => `${BASE}/api/Product/SearchProducts?query=${q}`,
   getProductsByCategory: (categoryId) => `${BASE}/api/Product/GetProductsByCategoryID?categoryId=${categoryId}`,
   addProduct: () => `${BASE}/api/Product/AddProduct`,

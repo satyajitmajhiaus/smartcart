@@ -4,6 +4,8 @@ select * from Currencies
 SELECT * FROM Products order by ProductId desc -- where SearchVector like '%samsung%'
 select * from Users
 
+-- Homeproducts ith pagination
+SELECT * FROM Products WHERE PopularityScore >= 80 ORDER BY PopularityScore DESC OFFSET 24 ROWS FETCH NEXT 24 ROWS ONLY;
 
 --related
 SELECT DISTINCT P.*
@@ -11,6 +13,8 @@ SELECT DISTINCT P.*
 	JOIN STRING_SPLIT(
 	(SELECT Tags FROM Products WHERE ProductId = 85), ',') T
 	ON P.Tags LIKE '%' + T.value + '%' WHERE P.CategoryId = (SELECT CategoryId FROM Products WHERE ProductId = 85) AND P.ProductId <> 85; 
+
+
 
 insert into Users (Username,PasswordHash,Email,Role,CreatedAt) values 
 ('Satya',HASHBYTES('SHA2_256', 'smpass@2026'),'Satya@gmail.com','User',GETDATE())

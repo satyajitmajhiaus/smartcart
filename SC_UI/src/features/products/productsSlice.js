@@ -7,9 +7,9 @@ import { API } from "../../app/apiConfig";
 
 export const fetchPopularProducts = createAsyncThunk(
   "products/fetchPopularProducts",
-  async (_, { rejectWithValue }) => {
+  async ({ page = 1, pageSize = 24 } = {}, { rejectWithValue }) => {
     try {
-      const response = await fetch(API.getPopular());
+      const response = await fetch(API.getPopular(page, pageSize));
       if (!response.ok) {
         return rejectWithValue("Failed to fetch popular products");
       }
@@ -95,6 +95,12 @@ const initialState = {
   loading: false,
   error: null,
   searchQuery: "",
+  pagination: {
+    currentPage: 1,
+    totalPages: 1,
+    pageSize: 24,
+    totalItems: 0,
+  },
   filters: {
     category: "",
     priceRange: [0, Infinity],
@@ -170,7 +176,10 @@ const productsSlice = createSlice({
       })
       .addCase(fetchPopularProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.popularProducts = action.payload;
+        state.popularProducts = action.payload.items || [];
+        if (action.payload.pagination) {
+          state.pagination = action.payload.pagination;
+        }
         // try {
         //   if (typeof window !== "undefined" && window.localStorage) {
         //     localStorage.setItem(

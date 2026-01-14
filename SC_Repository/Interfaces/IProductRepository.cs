@@ -1,4 +1,5 @@
 ﻿using SC_Repository.Entities;
+using SC_Repository.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,10 @@ namespace SC_Repository.Interfaces
     {
         
         Task<IEnumerable<Product>> GetPopolarProductsAsync();
+        Task<PaginatedResult<Product>> GetPopolarProductsAsync(int page, int pageSize);
         Task<IEnumerable<Product>> SearchProductsAsync(string query);
         Task<IEnumerable<Product>> GetRelatedProductsAsync(int productId);
+
         Task<IEnumerable<AutoSuggestions>> GetAutoSuggestedProductsAsync(string query);
 
         Task<IEnumerable<Product>> GetProductsByCategoryIDAsync(int categoryId);
