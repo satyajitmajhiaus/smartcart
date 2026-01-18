@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SC_API.Utilities;
 using SC_Repository.Entities;
 using SC_Repository.Interfaces;
 using System;
@@ -11,10 +12,12 @@ namespace SC_API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly JwtTokenHelper _tokenHelper;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, JwtTokenHelper tokenHelper)
         {
             _userRepository = userRepository;
+            _tokenHelper = tokenHelper;
         }
 
         [HttpPost("login")]
@@ -26,7 +29,8 @@ namespace SC_API.Controllers
                 return Unauthorized("Invalid credentials or role.");
             }
 
-            return Ok("Login successful.");
+            string token = _tokenHelper.GenerateToken(user.Username,user.Role);
+            return Ok(token);
         }
     }
 }

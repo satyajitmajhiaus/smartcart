@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -156,6 +157,7 @@ namespace SC_API.Controllers
         }
 
         [HttpPost("AddProduct")]
+        [Authorize(Roles = "Admin")]
         public Task<int> AddProduct(Product product)
         {
             Task<int> actionResult = _productRepository.AddAsync(product);
@@ -163,6 +165,7 @@ namespace SC_API.Controllers
         }
 
         [HttpPost("UpdateProduct")]
+        [Authorize(Roles = "Admin")]
         public Task<bool> UpdateProduct(Product product)
         {
             Task<bool> actionResult = _productRepository.UpdateAsync(product);
@@ -170,6 +173,7 @@ namespace SC_API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public Task<bool> DeleteProduct(int id)
         {
             Task<bool> actionResult = _productRepository.DeleteAsync(id);

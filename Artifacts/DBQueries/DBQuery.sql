@@ -18,15 +18,19 @@ SELECT DISTINCT P.*
 
 
 insert into Users (Username,PasswordHash,Email,Role,CreatedAt) values 
-('Satya',HASHBYTES('SHA2_256', 'smpass@2026'),'Satya@gmail.com','User',GETDATE())
+('Satya',HASHBYTES('SHA2_256', 'sc@2026'),'Satya@gmail.com','User',GETDATE())
 insert into Users (Username,PasswordHash,Email,Role,CreatedAt) values 
-('Satyajit',HASHBYTES('SHA2_256', 'smpass@2026'),'Satyajit@gmail.com','Admin',GETDATE())
+('Satyajit',HASHBYTES('SHA2_256', 'sc@2026'),'Satyajit@gmail.com','Admin',GETDATE())
 update Users set PasswordHash = HASHBYTES('SHA2_256', 'sc@2026')
 
 SELECT COUNT(1) FROM Users 
-	WHERE username = 'Satya' AND PasswordHash = HASHBYTES('SHA2_256', 'sc@2026') AND Role = 'user' AND IsActive = 1
+                          WHERE username = 'Satyajit' AND PasswordHash = HASHBYTES('SHA2_256', 'smpass@2026') AND Role = 'Admin' AND IsActive = 1
 SELECT COUNT(1) FROM Users 
-                          WHERE username = 'Satya' AND PasswordHash = HASHBYTES('SHA2_256', 'sc@2026') AND Role = 'User' AND IsActive = 1
+	WHERE username = 'Satya' AND PasswordHash = HASHBYTES('SHA2_256', 'sc@2026') 
+		AND Role = 'user' AND IsActive = 1
+SELECT COUNT(1) FROM Users 
+     WHERE username = 'Satyajit' AND PasswordHash = HASHBYTES('SHA2_256', 'sc@2026') 
+		AND Role = 'admin' AND IsActive = 1
 
 select DISTINCT Suggestion from
 	(SELECT DISTINCT name AS Suggestion FROM Products 
