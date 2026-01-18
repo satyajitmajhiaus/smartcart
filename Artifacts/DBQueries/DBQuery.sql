@@ -14,6 +14,7 @@ SELECT DISTINCT P.*
 	(SELECT Tags FROM Products WHERE ProductId = 85), ',') T
 	ON P.Tags LIKE '%' + T.value + '%' WHERE P.CategoryId = (SELECT CategoryId FROM Products WHERE ProductId = 85) AND P.ProductId <> 85; 
 
+	SELECT @@VERSION;
 
 
 insert into Users (Username,PasswordHash,Email,Role,CreatedAt) values 

@@ -5,7 +5,6 @@ import "./cart.css";
 
 export default function Cart() {
   const cartItems = useSelector((state) => state.cart.items);
-  const products = useSelector((state) => state.products.items);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

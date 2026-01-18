@@ -62,7 +62,7 @@ function Product({ product }) {
 
   const confirmDelete = async () => {
     if (!targetProduct) return;
-    const id = targetProduct.productId ?? targetProduct.id ?? targetProduct.pId;
+    const id = targetProduct.productId;
     try {
       const resp = await fetch(API.deleteProduct(id), {
         method: "DELETE",
