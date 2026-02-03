@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { login } from './userSlice';
+import { login } from './loginSlice';
 import { API } from '../../app/apiConfig';
-import './user.css';
+import './login.css';
 
 function Login({ onClose }) {
   const [userType, setUserType] = useState('user');
@@ -23,12 +23,12 @@ function Login({ onClose }) {
 
     try {
       const role = (userType || 'user').charAt(0).toUpperCase() + (userType || 'user').slice(1);
-      const payload = { username: userName, password, role };
+      const reqPayload = { username: userName, password, role };
 
       const res = await fetch(API.login(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(reqPayload),
       });
 
       if (!res.ok) {
@@ -37,14 +37,15 @@ function Login({ onClose }) {
         return;
       }
 
-      const data = await res;
+      const data = await res.text();
 
       // const userPayload = {
       //   userType: data.role ? data.role.toLowerCase() : userType,
       //   userName: data.username || userName,
       // };
+      console.log("Logging in user response:", data);
 
-      dispatch(login(payload));
+      dispatch(login({reqPayload, data}));
 
       onClose();
     } catch (err) {

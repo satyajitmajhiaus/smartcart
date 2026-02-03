@@ -4,6 +4,7 @@ const initialState = {
   isLoggedIn: false,
   userType: null, // 'admin' or 'user'
   userName: null,
+  userToken: null,
 };
 
 const userSlice = createSlice({
@@ -11,22 +12,18 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      const { role, username } = action.payload;
+      console.log("Logging in user:", action.payload);
+      const { role, username } = action.payload.reqPayload;
       state.isLoggedIn = true;
       state.userType = role;
       state.userName = username;
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          userType: role,
-          userName: username,
-        })
-      );
+      state.userToken = action.payload.data;      
     },
     logout: (state) => {
       state.isLoggedIn = false;
       state.userType = null;
       state.userName = null;
+      state.userToken = null;
       try {
         localStorage.removeItem("user");
       } catch (err) {

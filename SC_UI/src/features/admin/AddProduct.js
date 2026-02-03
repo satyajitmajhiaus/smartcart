@@ -53,7 +53,10 @@ const AddProduct = () => {
     try {
       const res = await fetch(API.addProduct(), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify(payload),
       });
 
@@ -86,7 +89,7 @@ const AddProduct = () => {
       </div>
 
       <div className="product-card">
-        {isLoggedIn && userType.toLowerCase() === "admin" ? 
+        {isLoggedIn && userType && userType.toLowerCase() === "admin" ? 
         (<form className="product-form" onSubmit={handleSubmit}>
           <div className="form-row">
             <label>Name</label>

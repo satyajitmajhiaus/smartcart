@@ -94,10 +94,17 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddSingleton<JwtTokenHelper>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddSingleton<ILogRepository, LogRepository>();
+
+
+
 
 var app = builder.Build();
 app.UseCors("AllowReactApp");
@@ -110,6 +117,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseExceptionHandler((_) => { });
 
 app.UseAuthorization();
 

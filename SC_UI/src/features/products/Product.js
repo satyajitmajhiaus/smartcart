@@ -66,6 +66,9 @@ function Product({ product }) {
     try {
       const resp = await fetch(API.deleteProduct(id), {
         method: "DELETE",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
       if (!resp.ok) {
         const text = await resp.text();
@@ -93,7 +96,7 @@ function Product({ product }) {
           src={product.imageUrl}
           className="product-card-image"
         />
-        {isLoggedIn && userType.toLowerCase() === "admin" && (
+        {isLoggedIn && userType && userType.toLowerCase() === "admin" && (
           <div className="admin-controls">
             <button
               className="product-edit-btn"

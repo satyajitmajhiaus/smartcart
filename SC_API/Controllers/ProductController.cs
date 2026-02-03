@@ -12,6 +12,7 @@ using System.Text.Json;
 namespace SC_API.Controllers
 {
     [Route("api/[controller]")]
+    
     [ApiController]
     public class ProductController : ControllerBase
     {

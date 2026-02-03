@@ -67,7 +67,7 @@ export default function ProductsPopular() {
       <div>
         <div className="product-header">
           <h2>Popular Products</h2>
-          {isLoggedIn && userType.toLowerCase() === "admin" && (
+          {isLoggedIn && userType && userType.toLowerCase() === "admin" && (
             <div
               className="add-product"
               onClick={() => navigate("/addproduct")}

@@ -16,8 +16,4 @@
     <ProjectReference Include="..\SC_Repository\SC_Repository.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

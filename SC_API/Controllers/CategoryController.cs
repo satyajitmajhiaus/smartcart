@@ -29,7 +29,6 @@ namespace SC_API.Controllers
             {
                 return JsonSerializer.Deserialize<IEnumerable<Category>>(cachedResults);
             }
-
             //Query SQL if not availabe in Redis
             IEnumerable<Category> results = await _categoryRepository.GetAllAsync();
 
